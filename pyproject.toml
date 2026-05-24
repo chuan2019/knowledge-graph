@@ -1,0 +1,17 @@
+[project]
+name = "knowledge-graph"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "dotenv>=0.9.9",
+    "faker>=40.19.1",
+    "jupyterlab>=4.5.7",
+    "langchain-community>=0.4.2",
+    "neo4j>=6.2.0",
+    "neo4j-viz>=1.4.0",
+    "numpy>=2.4.6",
+    "pandas>=3.0.3",
+    "tqdm>=4.67.3",
+]

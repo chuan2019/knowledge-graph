@@ -1,0 +1,43 @@
+-- Complex Multi-Hop Query 1: Rights Compliance
+MATCH (v:Version)<-[:HAS_VERSION]-(t:Title)
+MATCH (v)-[:GRANTED_TO]->(c:Client)
+MATCH (v)-[:LOCALIZED_FOR]->(l:Language)
+WHERE c.tier = 'Tier 1' AND l.language_name CONTAINS 'Spanish'
+RETURN t.title_name, c.client_name, l.language_name
+LIMIT 10;
+
+-- Complex Multi-Hop Query 2: Delivery Chain Analysis
+MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v:Version)
+MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)
+MATCH (dp)-[:LOCATED_IN]->(r:Region)
+MATCH (v)-[:BELONGS_TO]->(t:Title)
+WHERE dr.status IN ['Delayed', 'Failed']
+AND r.continent = 'EU'
+RETURN t.title_name, dp.point_name, dr.status, dr.deadline
+ORDER BY dr.deadline ASC
+LIMIT 20;
+
+-- Complex Multi-Hop Query 3: Content Rights Optimization
+MATCH (c:Client)-[:HAS_RIGHTS]->(r:Rights)-[:FOR_VERSION]->(v:Version)
+MATCH (v)-[:HAS_AUDIO]->(a:AudioFormat)
+WHERE r.is_active = true
+AND r.end_date > date()
+AND a.format_name = 'Dolby Atmos'
+RETURN c.client_name, count(DISTINCT v) as atmos_titles
+ORDER BY atmos_titles DESC;
+
+-- Complex Multi-Hop Query 4: Localization Status Report
+MATCH (loc:Localization)-[:FOR_VERSION]->(v:Version)
+MATCH (v)-[:BELONGS_TO]->(t:Title)
+WHERE loc.status = 'In Progress'
+RETURN t.title_name, count(loc) as active_localizations
+HAVING count(loc) > 2;
+
+-- Complex Multi-Hop Query 5: Client Delivery Performance
+MATCH (c:Client)<-[:REQUESTED_BY]-(dr:DeliveryRequest)
+MATCH (dr)-[:FOR_VERSION]->(v:Version)
+WHERE dr.status IN ['Completed', 'Failed']
+RETURN c.client_name,
+       avg(CASE WHEN dr.status = 'Completed' THEN 1 ELSE 0 END) as success_rate,
+       count(dr) as total_requests
+ORDER BY success_rate ASC;

@@ -1,0 +1,51 @@
+region_id,region_name,continent
+REG_001,Niue,M
+REG_002,French Polynesia,L
+REG_003,Bahrain,L
+REG_004,Mongolia,A
+REG_005,Guam,L
+REG_006,Montserrat,N
+REG_007,Belize,A
+REG_008,Tajikistan,E
+REG_009,Gibraltar,E
+REG_010,Dominican Republic,N
+REG_011,Romania,M
+REG_012,Mayotte,N
+REG_013,Nauru,M
+REG_014,Angola,M
+REG_015,Dominica,L
+REG_016,Sudan,L
+REG_017,Serbia,E
+REG_018,Canada,L
+REG_019,Jordan,L
+REG_020,Ukraine,M
+REG_021,Spain,L
+REG_022,Suriname,A
+REG_023,Guatemala,E
+REG_024,Montserrat,L
+REG_025,Guam,L
+REG_026,Marshall Islands,A
+REG_027,Cook Islands,L
+REG_028,Australia,A
+REG_029,Guinea-Bissau,L
+REG_030,Haiti,A
+REG_031,San Marino,A
+REG_032,Greenland,A
+REG_033,Botswana,A
+REG_034,New Zealand,L
+REG_035,Italy,E
+REG_036,Belgium,N
+REG_037,Philippines,L
+REG_038,Hong Kong,N
+REG_039,Vanuatu,E
+REG_040,Russian Federation,A
+REG_041,Liberia,N
+REG_042,Poland,A
+REG_043,Czech Republic,M
+REG_044,North Macedonia,M
+REG_045,Guam,A
+REG_046,Libyan Arab Jamahiriya,M
+REG_047,Greece,A
+REG_048,Bulgaria,M
+REG_049,United Kingdom,A
+REG_050,Morocco,A
