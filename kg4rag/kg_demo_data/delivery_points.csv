@@ -1,151 +1,151 @@
 delivery_point_id,point_name,delivery_type,region_id
-DP_00001,Howard-Medina - Broadcast,Broadcast,REG_031
-DP_00002,Christensen-Torres - Theatrical,Theatrical,REG_017
-DP_00003,Davila-Smith - Broadcast,Theatrical,REG_026
-DP_00004,White and Sons - VOD,Physical,REG_025
-DP_00005,Mullen-Dorsey - Theatrical,VOD,REG_030
-DP_00006,"Walker, Glover and Brown - VOD",VOD,REG_039
-DP_00007,Williams-James - Streaming,Physical,REG_024
-DP_00008,Powers-Sanders - Theatrical,Theatrical,REG_024
-DP_00009,Douglas-Cooper - Streaming,Theatrical,REG_025
-DP_00010,Howard-Collins - VOD,VOD,REG_002
-DP_00011,"Parker, Miller and Fletcher - Broadcast",Broadcast,REG_045
-DP_00012,Cunningham-Rivera - Streaming,Physical,REG_008
-DP_00013,Peterson-Smith - Broadcast,Physical,REG_013
-DP_00014,Galloway LLC - Streaming,VOD,REG_029
-DP_00015,Sanchez Inc - VOD,Physical,REG_013
-DP_00016,"Williams, Whitehead and Warren - Streaming",Theatrical,REG_012
-DP_00017,"Barron, Gutierrez and Knight - Broadcast",Physical,REG_007
-DP_00018,"Willis, Cummings and Tanner - Theatrical",Physical,REG_048
-DP_00019,"Sanchez, Massey and Alvarez - Broadcast",VOD,REG_007
-DP_00020,Chavez-Washington - VOD,Broadcast,REG_036
-DP_00021,"Edwards, Zimmerman and Sanchez - Broadcast",Theatrical,REG_013
-DP_00022,Adams-Lee - Theatrical,Physical,REG_002
-DP_00023,Martinez PLC - Theatrical,Theatrical,REG_031
-DP_00024,Mccann-Meyers - VOD,Streaming,REG_017
-DP_00025,Bridges-Gomez - Streaming,Physical,REG_011
-DP_00026,Foster and Sons - Theatrical,Broadcast,REG_022
-DP_00027,"Wheeler, Gomez and Gibson - Broadcast",Streaming,REG_009
-DP_00028,"Hudson, Hudson and Clark - VOD",Streaming,REG_018
-DP_00029,Gregory-Miles - Broadcast,Streaming,REG_049
-DP_00030,"Davila, Hester and Chase - Theatrical",Theatrical,REG_006
-DP_00031,Smith-Scott - Streaming,Broadcast,REG_011
-DP_00032,Hernandez-Knox - VOD,Streaming,REG_005
-DP_00033,"Coleman, Lopez and Davis - Streaming",Physical,REG_023
-DP_00034,"Bean, Galloway and Park - Streaming",Physical,REG_020
-DP_00035,Hernandez Group - Theatrical,VOD,REG_019
-DP_00036,"Brennan, Smith and Martin - VOD",VOD,REG_018
-DP_00037,Rodriguez-Davidson - VOD,Physical,REG_036
-DP_00038,"King, Graham and Fletcher - Theatrical",Physical,REG_049
-DP_00039,"Dougherty, Moore and Lee - Streaming",Physical,REG_011
-DP_00040,"Bell, Harmon and Walker - Streaming",Broadcast,REG_044
-DP_00041,Henderson Ltd - Theatrical,Theatrical,REG_043
-DP_00042,Brown Ltd - Streaming,Broadcast,REG_048
-DP_00043,"Johnson, Cox and Flores - Theatrical",Streaming,REG_046
-DP_00044,Pratt and Sons - Streaming,Theatrical,REG_033
-DP_00045,"Wilson, Walker and Wilson - Streaming",Streaming,REG_036
-DP_00046,"Reynolds, Williams and Miller - Streaming",Physical,REG_025
-DP_00047,"Perez, Kaiser and Phillips - VOD",Theatrical,REG_040
-DP_00048,Dixon and Sons - Broadcast,Physical,REG_033
-DP_00049,Romero-Lopez - Broadcast,VOD,REG_015
-DP_00050,Hudson-Ware - Broadcast,Physical,REG_001
-DP_00051,Carney-Lowery - VOD,VOD,REG_050
-DP_00052,"Ruiz, Huang and Wright - Broadcast",Physical,REG_043
-DP_00053,"Miles, Castro and Collier - Broadcast",Physical,REG_011
-DP_00054,"Howell, Williams and Morgan - Broadcast",Theatrical,REG_028
-DP_00055,Cummings LLC - Broadcast,Broadcast,REG_046
-DP_00056,Maddox-Webb - Streaming,VOD,REG_033
-DP_00057,"Hayes, Hood and Lee - VOD",Theatrical,REG_013
-DP_00058,"Walker, Moore and Lucas - VOD",VOD,REG_002
-DP_00059,Reyes-Garcia - Broadcast,Physical,REG_005
-DP_00060,Rasmussen-Wilson - Streaming,Streaming,REG_033
-DP_00061,Castro Group - Streaming,Theatrical,REG_040
-DP_00062,Allen PLC - Theatrical,VOD,REG_021
-DP_00063,Gilbert-Garrison - Broadcast,Theatrical,REG_016
-DP_00064,Smith-Dominguez - VOD,VOD,REG_027
-DP_00065,"Grant, Mcdaniel and Stewart - Broadcast",Theatrical,REG_049
-DP_00066,Russell Group - Streaming,Physical,REG_008
-DP_00067,Patrick Inc - Broadcast,Streaming,REG_041
-DP_00068,"Taylor, Smith and Hernandez - Streaming",Theatrical,REG_033
-DP_00069,Rosario-Smith - Theatrical,VOD,REG_005
-DP_00070,Simmons Inc - Streaming,VOD,REG_030
-DP_00071,"Kelly, Terry and Franklin - Theatrical",Theatrical,REG_007
-DP_00072,Francis PLC - VOD,Broadcast,REG_028
-DP_00073,"Spencer, Ellis and Grant - Broadcast",Streaming,REG_035
-DP_00074,Ramirez-Poole - Streaming,VOD,REG_015
-DP_00075,Johnston-Stewart - Streaming,Physical,REG_039
-DP_00076,Hall Group - VOD,Broadcast,REG_022
-DP_00077,Mcconnell-Gregory - Theatrical,Physical,REG_036
-DP_00078,"Benitez, Woods and Stevens - Streaming",Streaming,REG_026
-DP_00079,"Brown, Ramos and Liu - Broadcast",Streaming,REG_034
-DP_00080,Ramirez PLC - VOD,VOD,REG_042
-DP_00081,"Silva, Owens and Nichols - Streaming",Broadcast,REG_013
-DP_00082,"Cherry, Patterson and Johnson - Theatrical",Theatrical,REG_046
-DP_00083,Hill-Henderson - Theatrical,Theatrical,REG_036
-DP_00084,Pena-Gonzales - Streaming,VOD,REG_027
-DP_00085,"Johnson, Maldonado and Reed - Theatrical",Streaming,REG_035
-DP_00086,"Hines, Johnson and Forbes - Theatrical",Physical,REG_019
-DP_00087,"Charles, Farley and Townsend - Theatrical",Theatrical,REG_033
-DP_00088,"Mcgrath, Davis and Hogan - VOD",Streaming,REG_034
-DP_00089,"Walker, Moss and Hall - Streaming",Streaming,REG_024
-DP_00090,Bennett-Brady - Broadcast,Streaming,REG_021
-DP_00091,Martinez LLC - Streaming,Physical,REG_042
-DP_00092,Stanley LLC - Broadcast,Physical,REG_014
-DP_00093,Hernandez-Fisher - VOD,VOD,REG_041
-DP_00094,Shea Ltd - Broadcast,Physical,REG_049
-DP_00095,Wagner-Carr - Broadcast,VOD,REG_015
-DP_00096,Erickson-Peterson - Theatrical,Theatrical,REG_018
-DP_00097,"Lee, Michael and Richardson - Streaming",Broadcast,REG_038
-DP_00098,"Smith, Blake and Jackson - Theatrical",VOD,REG_030
-DP_00099,"Fox, Gonzalez and Lee - Theatrical",Theatrical,REG_019
-DP_00100,Willis-Rhodes - Theatrical,Physical,REG_013
-DP_00101,Branch-Suarez - Streaming,Theatrical,REG_022
-DP_00102,Mcdaniel-James - Broadcast,Physical,REG_015
-DP_00103,Logan-Fowler - Streaming,Theatrical,REG_021
-DP_00104,Simmons and Sons - Theatrical,VOD,REG_024
-DP_00105,Ibarra LLC - Broadcast,Broadcast,REG_035
-DP_00106,Williamson-Romero - Streaming,Broadcast,REG_002
-DP_00107,"Jarvis, Welch and Wilcox - VOD",VOD,REG_044
-DP_00108,"Hanna, Guzman and Lynch - VOD",Theatrical,REG_018
-DP_00109,Pierce-Cox - VOD,VOD,REG_016
-DP_00110,"West, Conley and Mcfarland - Streaming",VOD,REG_046
-DP_00111,Johnson-Chaney - Broadcast,Streaming,REG_014
-DP_00112,"Graham, Jensen and Vaughan - VOD",Streaming,REG_049
-DP_00113,"Taylor, Graham and Pacheco - Theatrical",Streaming,REG_005
-DP_00114,"Torres, Smith and Schultz - Broadcast",Broadcast,REG_009
-DP_00115,Spencer Inc - Broadcast,Physical,REG_021
-DP_00116,Barnes-Russell - Streaming,Streaming,REG_002
-DP_00117,Martinez-Anderson - Broadcast,Broadcast,REG_005
-DP_00118,Austin and Sons - Broadcast,VOD,REG_020
-DP_00119,Ferguson Ltd - Theatrical,VOD,REG_048
-DP_00120,Kaufman-Sandoval - VOD,Broadcast,REG_013
-DP_00121,Cardenas-Peterson - Broadcast,Broadcast,REG_019
-DP_00122,"Marshall, Rangel and Hughes - Streaming",Physical,REG_029
-DP_00123,"Thomas, Thomas and Roy - Broadcast",VOD,REG_008
-DP_00124,"Miller, Morrison and Fischer - Broadcast",VOD,REG_002
-DP_00125,Gardner Inc - Theatrical,Theatrical,REG_035
-DP_00126,Parker LLC - Broadcast,Theatrical,REG_005
-DP_00127,Jones-Suarez - VOD,VOD,REG_007
-DP_00128,Glover-Lynn - Theatrical,Broadcast,REG_045
-DP_00129,"Pena, Logan and Chavez - Streaming",Broadcast,REG_041
-DP_00130,Ali Group - Streaming,Broadcast,REG_050
-DP_00131,"Gomez, Johnson and Davis - Broadcast",VOD,REG_023
-DP_00132,"Tran, Williams and Beard - Broadcast",Streaming,REG_039
-DP_00133,Ramsey PLC - VOD,Physical,REG_042
-DP_00134,Hayes LLC - VOD,VOD,REG_033
-DP_00135,"Santiago, Owens and Palmer - Streaming",Physical,REG_050
-DP_00136,"Brown, Henderson and Mclaughlin - Streaming",Streaming,REG_050
-DP_00137,"Gutierrez, Hall and Cunningham - Broadcast",VOD,REG_033
-DP_00138,Martinez-Bass - Streaming,Physical,REG_045
-DP_00139,"Phillips, Olson and Jones - VOD",Broadcast,REG_024
-DP_00140,"Rodriguez, Wilson and Mclean - Broadcast",Physical,REG_048
-DP_00141,"Rogers, Carr and Atkins - Streaming",VOD,REG_036
-DP_00142,"Hall, Nelson and Johnson - VOD",Theatrical,REG_034
-DP_00143,Dalton PLC - VOD,Streaming,REG_032
-DP_00144,Levy-Swanson - Streaming,Physical,REG_050
-DP_00145,Carter and Sons - Broadcast,Broadcast,REG_030
-DP_00146,Waller Group - Streaming,VOD,REG_033
-DP_00147,Johnson Group - Streaming,Theatrical,REG_040
-DP_00148,Smith-Rose - Broadcast,Streaming,REG_018
-DP_00149,Evans and Sons - VOD,Physical,REG_006
-DP_00150,Herrera-Oneill - Broadcast,Theatrical,REG_031
+DP_00001,Mcdonald LLC - Broadcast,VOD,REG_031
+DP_00002,"Owens, Wells and Sullivan - Theatrical",Theatrical,REG_048
+DP_00003,Torres Ltd - Theatrical,Broadcast,REG_015
+DP_00004,Cox-Mckinney - VOD,Physical,REG_031
+DP_00005,Gonzales LLC - VOD,VOD,REG_029
+DP_00006,"Hernandez, Carlson and Williams - Theatrical",VOD,REG_002
+DP_00007,Sanders Ltd - Theatrical,VOD,REG_020
+DP_00008,Hernandez Group - Streaming,VOD,REG_025
+DP_00009,Bauer Inc - VOD,Theatrical,REG_049
+DP_00010,Williams-Alexander - Streaming,Streaming,REG_033
+DP_00011,"Wilson, Keller and Lewis - Broadcast",Theatrical,REG_045
+DP_00012,Smith-Moore - Broadcast,VOD,REG_022
+DP_00013,Schultz PLC - Streaming,Streaming,REG_010
+DP_00014,Reyes PLC - Streaming,Physical,REG_049
+DP_00015,"Warren, Smith and Young - VOD",VOD,REG_039
+DP_00016,"Lopez, Cherry and Ramirez - Broadcast",Streaming,REG_027
+DP_00017,Green-Hill - Theatrical,Physical,REG_022
+DP_00018,"Torres, Henry and Jones - Theatrical",Broadcast,REG_027
+DP_00019,"Moran, Barnett and Santiago - Theatrical",Streaming,REG_006
+DP_00020,Hanson-Logan - Theatrical,Broadcast,REG_045
+DP_00021,"Black, Garcia and Brady - Theatrical",VOD,REG_038
+DP_00022,Levine-Hale - VOD,VOD,REG_033
+DP_00023,"Brown, Pratt and Jackson - Streaming",Broadcast,REG_024
+DP_00024,Diaz Group - Streaming,Broadcast,REG_042
+DP_00025,Nunez and Sons - VOD,Broadcast,REG_002
+DP_00026,Jones-Middleton - VOD,Theatrical,REG_034
+DP_00027,Young Inc - Theatrical,Physical,REG_016
+DP_00028,"Hughes, Miller and Davis - Broadcast",Broadcast,REG_018
+DP_00029,"Foster, Gutierrez and Black - Broadcast",Streaming,REG_047
+DP_00030,Turner Ltd - VOD,Broadcast,REG_008
+DP_00031,"Hubbard, Peck and Butler - Theatrical",Physical,REG_010
+DP_00032,Gardner-Yates - Streaming,Physical,REG_014
+DP_00033,Lee Inc - Streaming,Physical,REG_038
+DP_00034,Sosa Inc - Theatrical,Streaming,REG_029
+DP_00035,Jones-Crawford - Streaming,Streaming,REG_023
+DP_00036,Juarez LLC - Broadcast,Broadcast,REG_007
+DP_00037,Salas-Warren - Theatrical,Broadcast,REG_046
+DP_00038,Callahan-Pacheco - Broadcast,VOD,REG_011
+DP_00039,Freeman and Sons - Broadcast,Physical,REG_006
+DP_00040,Thomas-Torres - Theatrical,VOD,REG_018
+DP_00041,Lawson LLC - Streaming,Streaming,REG_005
+DP_00042,Chapman Inc - Theatrical,Physical,REG_032
+DP_00043,Salazar-Fox - Streaming,VOD,REG_020
+DP_00044,Craig-Chambers - VOD,VOD,REG_015
+DP_00045,Meyer and Sons - Streaming,VOD,REG_044
+DP_00046,"Mcmillan, Mejia and Russell - Streaming",VOD,REG_040
+DP_00047,"Alvarado, Ochoa and Olson - Broadcast",Broadcast,REG_015
+DP_00048,"Kelly, Carter and Henderson - Broadcast",Broadcast,REG_013
+DP_00049,"Barrera, Powers and Nguyen - Theatrical",Broadcast,REG_047
+DP_00050,Harris-Oneill - Broadcast,Physical,REG_036
+DP_00051,Lucas-Phillips - VOD,Streaming,REG_022
+DP_00052,Mason-Casey - VOD,Physical,REG_046
+DP_00053,"Odonnell, Gonzalez and Lewis - Streaming",Physical,REG_018
+DP_00054,Horne LLC - Theatrical,Broadcast,REG_025
+DP_00055,Mcpherson-Boyle - VOD,Theatrical,REG_022
+DP_00056,"Garcia, Owen and Leonard - Broadcast",Theatrical,REG_030
+DP_00057,"Dorsey, Howard and Scott - Streaming",Theatrical,REG_048
+DP_00058,"Bennett, Acevedo and Colon - Theatrical",Broadcast,REG_044
+DP_00059,"Calhoun, Kim and Green - Broadcast",Theatrical,REG_004
+DP_00060,James Group - VOD,Streaming,REG_046
+DP_00061,Richards-Collins - VOD,Streaming,REG_024
+DP_00062,"Houston, Barber and Garcia - Broadcast",Streaming,REG_042
+DP_00063,Robinson-Lopez - Theatrical,Theatrical,REG_014
+DP_00064,Wilkinson LLC - Broadcast,Theatrical,REG_046
+DP_00065,Frazier-Bailey - VOD,Broadcast,REG_043
+DP_00066,Meyer Inc - Broadcast,Theatrical,REG_050
+DP_00067,Moody-Martin - Theatrical,Theatrical,REG_034
+DP_00068,Miller and Sons - Broadcast,Streaming,REG_027
+DP_00069,"Andrews, Cook and Martinez - Broadcast",Theatrical,REG_016
+DP_00070,Martin and Sons - Broadcast,Streaming,REG_020
+DP_00071,"Davis, Oconnor and Barry - Theatrical",Physical,REG_032
+DP_00072,Davidson-Fowler - VOD,Broadcast,REG_035
+DP_00073,Trevino PLC - VOD,Streaming,REG_028
+DP_00074,"Brown, Burns and Simmons - Streaming",VOD,REG_006
+DP_00075,Jones-Reynolds - Broadcast,VOD,REG_042
+DP_00076,"Flores, Bond and Nelson - VOD",VOD,REG_016
+DP_00077,Mendoza Ltd - Broadcast,Streaming,REG_011
+DP_00078,Holt-Tate - VOD,Streaming,REG_009
+DP_00079,Reeves-Mayer - VOD,VOD,REG_026
+DP_00080,"James, Horton and King - Broadcast",VOD,REG_048
+DP_00081,Guerrero-Dawson - Broadcast,Theatrical,REG_049
+DP_00082,"Carrillo, Elliott and Nichols - Streaming",VOD,REG_006
+DP_00083,Fletcher Ltd - VOD,Theatrical,REG_017
+DP_00084,Long-Taylor - VOD,Streaming,REG_026
+DP_00085,"Watson, Hubbard and Ellis - Streaming",VOD,REG_026
+DP_00086,Wiggins-Mcdowell - VOD,Theatrical,REG_015
+DP_00087,Fisher-Stephenson - VOD,Theatrical,REG_021
+DP_00088,Villa-Weaver - Broadcast,Streaming,REG_046
+DP_00089,Irwin-Duran - Broadcast,Streaming,REG_030
+DP_00090,Li Group - Streaming,Physical,REG_034
+DP_00091,Livingston Ltd - Streaming,Broadcast,REG_016
+DP_00092,"Schroeder, Murphy and Baker - Theatrical",VOD,REG_035
+DP_00093,Campbell PLC - VOD,VOD,REG_049
+DP_00094,Roberson Group - Theatrical,Broadcast,REG_007
+DP_00095,Newton and Sons - Streaming,VOD,REG_008
+DP_00096,"Hodge, Bennett and Walters - Streaming",Theatrical,REG_050
+DP_00097,"Garcia, Ramos and Davidson - Theatrical",Theatrical,REG_012
+DP_00098,Harvey-Franklin - Streaming,VOD,REG_050
+DP_00099,Adams and Sons - Streaming,Streaming,REG_043
+DP_00100,Waters Group - Streaming,Physical,REG_048
+DP_00101,Garza-Hunt - Theatrical,Streaming,REG_025
+DP_00102,Reese Ltd - VOD,Streaming,REG_046
+DP_00103,Werner-Baker - Streaming,Broadcast,REG_033
+DP_00104,Chan-Espinoza - VOD,Theatrical,REG_017
+DP_00105,"Chapman, Hayes and Tyler - Theatrical",Theatrical,REG_023
+DP_00106,"Moore, Black and Shields - Broadcast",Theatrical,REG_008
+DP_00107,"Hess, Anthony and Campbell - VOD",Physical,REG_012
+DP_00108,"Palmer, Potter and Moss - Broadcast",Streaming,REG_001
+DP_00109,Griffin-Ray - Streaming,Physical,REG_032
+DP_00110,Anderson-Kline - Theatrical,Broadcast,REG_011
+DP_00111,Fitzgerald-Gilbert - VOD,VOD,REG_021
+DP_00112,Zuniga-Boyer - VOD,VOD,REG_003
+DP_00113,"Brown, Miller and Roberson - Theatrical",Broadcast,REG_023
+DP_00114,"Reynolds, Rogers and Rodriguez - Broadcast",VOD,REG_050
+DP_00115,"Bennett, Ali and Morales - VOD",Broadcast,REG_010
+DP_00116,"Williams, Price and Martinez - Streaming",VOD,REG_030
+DP_00117,Chavez LLC - Broadcast,Physical,REG_033
+DP_00118,"Tran, Moore and Pierce - Streaming",Physical,REG_036
+DP_00119,"Arnold, Smith and Johnson - VOD",Physical,REG_009
+DP_00120,Rose LLC - VOD,Streaming,REG_004
+DP_00121,Smith and Sons - Streaming,Streaming,REG_047
+DP_00122,Skinner Group - Theatrical,Streaming,REG_042
+DP_00123,Long Ltd - VOD,Theatrical,REG_041
+DP_00124,"Morrow, Foster and Strong - VOD",Physical,REG_002
+DP_00125,Diaz-Martinez - VOD,Broadcast,REG_037
+DP_00126,"Shah, Cobb and Collins - Theatrical",Theatrical,REG_007
+DP_00127,"Booker, Bailey and Ramirez - Streaming",Streaming,REG_040
+DP_00128,Stone PLC - Streaming,Physical,REG_027
+DP_00129,Johnson and Sons - Broadcast,Theatrical,REG_029
+DP_00130,Blair PLC - Streaming,Theatrical,REG_020
+DP_00131,"Jackson, Delgado and Mosley - Broadcast",Broadcast,REG_011
+DP_00132,King and Sons - VOD,Broadcast,REG_022
+DP_00133,Lee Inc - Theatrical,Streaming,REG_037
+DP_00134,"Weaver, Young and Warren - Broadcast",Physical,REG_034
+DP_00135,"Morgan, Bond and Gaines - Streaming",Physical,REG_019
+DP_00136,Hart Ltd - Theatrical,Broadcast,REG_014
+DP_00137,Jackson Group - Theatrical,Streaming,REG_046
+DP_00138,"Ramos, Taylor and Salinas - Broadcast",Physical,REG_009
+DP_00139,Saunders-Brown - VOD,Physical,REG_012
+DP_00140,Miller and Sons - Broadcast,Theatrical,REG_046
+DP_00141,Thomas Inc - Streaming,Physical,REG_003
+DP_00142,Wilson and Sons - VOD,Theatrical,REG_033
+DP_00143,"Brown, Drake and Walker - Streaming",VOD,REG_018
+DP_00144,Shaw-Pratt - VOD,Physical,REG_010
+DP_00145,"Fisher, Brown and Cooper - VOD",Broadcast,REG_030
+DP_00146,Norman PLC - Streaming,Streaming,REG_030
+DP_00147,"Payne, Riley and Long - Theatrical",Physical,REG_038
+DP_00148,"Lewis, Bright and Malone - Streaming",Streaming,REG_013
+DP_00149,Nichols-Rodriguez - Broadcast,Physical,REG_032
+DP_00150,"Brooks, Spence and Smith - Broadcast",Broadcast,REG_029

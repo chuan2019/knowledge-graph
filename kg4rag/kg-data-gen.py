@@ -12,6 +12,7 @@ import uuid
 import csv
 from tqdm import tqdm
 import os
+from pathlib import Path
 
 # Initialize Faker for realistic names
 fake = Faker()
@@ -34,6 +35,7 @@ SCALE_FACTOR = 1  # Set to 0.1 for quick test, 1 for full demo, 10 for performan
 actual_titles = int(NUM_TITLES * SCALE_FACTOR)
 actual_clients = int(NUM_CLIENTS * SCALE_FACTOR)
 actual_delivery_points = int(NUM_DELIVERY_POINTS * SCALE_FACTOR)
+DEFAULT_OUTPUT_DIR = Path(__file__).with_name('kg_demo_data')
 
 # ============= HELPER FUNCTIONS =============
 def generate_titles(n):
@@ -212,7 +214,7 @@ def generate_delivery_requests(versions_df, delivery_points_df, clients_df):
     return pd.DataFrame(requests)
 
 # ============= MAIN GENERATION FUNCTION =============
-def generate_knowledge_graph_data(output_dir='./kg_demo_data', scale_factor=1):
+def generate_knowledge_graph_data(output_dir=DEFAULT_OUTPUT_DIR, scale_factor=1):
     """Main orchestration function to generate all data"""
     
     global SCALE_FACTOR
@@ -393,7 +395,7 @@ if __name__ == "__main__":
     SCALE = 1  # Adjust this based on your needs
     
     data = generate_knowledge_graph_data(
-        output_dir='./kg_demo_data',
+        output_dir=DEFAULT_OUTPUT_DIR,
         scale_factor=SCALE
     )
     

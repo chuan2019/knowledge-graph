@@ -1,201 +1,201 @@
 client_id,client_name,client_type,tier,region_focus,active_since,credit_limit_usd,status
-CLIENT_00000,Woodward-Fernandez,Broadcaster,Tier 3,Europe,1993,4226580,On Hold
-CLIENT_00001,"White, Butler and Morgan",Independent,Tier 2,Europe,1991,4129282,On Hold
-CLIENT_00002,"Cox, Young and Garcia",Independent,Tier 2,Global,1993,219336,Active
-CLIENT_00003,Conway Ltd,Aggregator,Tier 1,APAC,2000,4442712,Active
-CLIENT_00004,"Callahan, Washington and Klein",Streaming Service,Tier 1,Global,2016,2476542,Active
-CLIENT_00005,Mcdonald Ltd,Aggregator,Tier 3,North America,2019,3766193,On Hold
-CLIENT_00006,Johnson Group,Aggregator,Tier 2,Global,1995,4212896,Active
-CLIENT_00007,Cox Ltd,Aggregator,Tier 1,APAC,2006,3896420,Active
-CLIENT_00008,Martinez-Scott,Broadcaster,Tier 2,Europe,2011,2449614,Active
-CLIENT_00009,Oliver-Phillips,Broadcaster,Tier 2,LATAM,1999,1653336,Active
-CLIENT_00010,Ponce PLC,Independent,Tier 3,North America,1991,767640,Active
-CLIENT_00011,Carter-Moore,Broadcaster,Tier 2,Europe,2005,1716198,Active
-CLIENT_00012,Tran LLC,Broadcaster,Tier 1,Europe,1998,2020801,On Hold
-CLIENT_00013,Gentry-Tran,Major Studio,Tier 3,Europe,1993,3535729,Active
-CLIENT_00014,Lewis LLC,Broadcaster,Tier 2,LATAM,2019,1029357,Active
-CLIENT_00015,Martinez-Fox,Aggregator,Tier 3,LATAM,2002,888474,On Hold
-CLIENT_00016,Montgomery Group,Streaming Service,Tier 1,North America,2021,2719232,Active
-CLIENT_00017,Haney Group,Aggregator,Tier 1,North America,1994,4493864,Active
-CLIENT_00018,"Garcia, Flores and Matthews",Major Studio,Tier 1,Global,2024,3371034,Active
-CLIENT_00019,Ramos Inc,Streaming Service,Tier 3,Europe,2008,2701713,On Hold
-CLIENT_00020,Perkins-Smith,Broadcaster,Tier 3,APAC,1991,4159541,Active
-CLIENT_00021,Weaver-Perry,Major Studio,Tier 3,APAC,2012,4500037,Active
-CLIENT_00022,Shaw-Henderson,Independent,Tier 2,Global,2002,1805848,On Hold
-CLIENT_00023,King-Carter,Aggregator,Tier 1,Global,2004,2672182,Active
-CLIENT_00024,"Mckee, Price and King",Independent,Tier 3,Global,2000,678513,On Hold
-CLIENT_00025,Medina Inc,Independent,Tier 3,Europe,1999,3836919,Active
-CLIENT_00026,"Cameron, Lewis and Smith",Aggregator,Tier 2,North America,2008,4499932,Active
-CLIENT_00027,"Evans, Montgomery and Moore",Broadcaster,Tier 2,Europe,2021,2370087,Active
-CLIENT_00028,Campbell LLC,Independent,Tier 3,Global,2001,3737024,On Hold
-CLIENT_00029,Mitchell-Oconnell,Streaming Service,Tier 1,Europe,2018,2415866,Active
-CLIENT_00030,"Bonilla, Petersen and Brooks",Independent,Tier 3,APAC,2009,4139138,On Hold
-CLIENT_00031,Murray-Cameron,Independent,Tier 2,North America,2014,2376255,Active
-CLIENT_00032,Washington PLC,Broadcaster,Tier 1,APAC,1998,4335423,Active
-CLIENT_00033,"Williams, Anderson and Williams",Major Studio,Tier 1,Europe,2001,4381940,Active
-CLIENT_00034,Edwards Group,Broadcaster,Tier 1,North America,2011,3139365,Active
-CLIENT_00035,Soto-Cochran,Independent,Tier 2,North America,1995,3608067,Active
-CLIENT_00036,"Ritter, Davis and Sanders",Independent,Tier 1,Europe,1994,279162,Active
-CLIENT_00037,Tran PLC,Streaming Service,Tier 1,LATAM,2017,4494495,Active
-CLIENT_00038,Miller-Myers,Broadcaster,Tier 1,Global,1999,1752302,Active
-CLIENT_00039,Miller and Sons,Streaming Service,Tier 3,APAC,1993,2084238,Active
-CLIENT_00040,Serrano PLC,Independent,Tier 1,North America,2019,1583732,Active
-CLIENT_00041,Jackson LLC,Major Studio,Tier 1,North America,2009,652054,Active
-CLIENT_00042,"Tran, Bryant and Martin",Streaming Service,Tier 1,Global,2002,802539,Active
-CLIENT_00043,"Hoffman, Mckinney and Thompson",Streaming Service,Tier 3,LATAM,1995,1196985,Active
-CLIENT_00044,Hubbard PLC,Independent,Tier 2,North America,1998,4439553,On Hold
-CLIENT_00045,Livingston Group,Broadcaster,Tier 2,Europe,1991,3529954,Active
-CLIENT_00046,"Pace, Salazar and Giles",Streaming Service,Tier 2,North America,2019,2130107,Active
-CLIENT_00047,"Maldonado, Garcia and Gregory",Streaming Service,Tier 1,Europe,2001,2603105,Active
-CLIENT_00048,Foley-Robinson,Independent,Tier 2,LATAM,2003,599805,Active
-CLIENT_00049,Davis-Morton,Streaming Service,Tier 2,Europe,2018,3365942,Active
-CLIENT_00050,Matthews LLC,Independent,Tier 3,APAC,2020,2400726,Active
-CLIENT_00051,"Cobb, Nguyen and Gonzales",Aggregator,Tier 1,Europe,2002,1774834,Active
-CLIENT_00052,Singh-Sanchez,Independent,Tier 1,APAC,2015,3770007,On Hold
-CLIENT_00053,"Frost, Adkins and Davis",Independent,Tier 2,North America,2014,235606,Active
-CLIENT_00054,"Delgado, Adams and Hudson",Aggregator,Tier 2,LATAM,2002,4275914,Active
-CLIENT_00055,Buchanan-Meyer,Independent,Tier 2,North America,1999,1427666,Active
-CLIENT_00056,Lawson-Mcdonald,Aggregator,Tier 3,LATAM,2004,1381245,On Hold
-CLIENT_00057,Bishop LLC,Aggregator,Tier 2,Global,2016,240446,Active
-CLIENT_00058,"Beasley, Hines and Johnson",Major Studio,Tier 1,North America,2007,4473940,Active
-CLIENT_00059,Whitaker-Turner,Broadcaster,Tier 2,APAC,2001,2956252,On Hold
-CLIENT_00060,"Hudson, Valencia and Garner",Independent,Tier 1,Europe,2023,2911554,Active
-CLIENT_00061,Ramirez Group,Major Studio,Tier 1,North America,1997,2591583,Active
-CLIENT_00062,Smith Inc,Aggregator,Tier 2,Europe,1999,3832471,Active
-CLIENT_00063,Dunlap-Andrews,Major Studio,Tier 2,Global,1998,4157920,Active
-CLIENT_00064,Lewis Inc,Independent,Tier 1,APAC,2020,2762114,Active
-CLIENT_00065,Ruiz-Hamilton,Major Studio,Tier 3,APAC,2020,1498933,On Hold
-CLIENT_00066,Riddle-Benson,Streaming Service,Tier 3,LATAM,2000,1345356,On Hold
-CLIENT_00067,Sanchez Inc,Aggregator,Tier 2,LATAM,2018,1724444,Active
-CLIENT_00068,Davis PLC,Major Studio,Tier 1,Europe,1991,2466495,Active
-CLIENT_00069,Macdonald Inc,Streaming Service,Tier 3,LATAM,1990,2224151,Active
-CLIENT_00070,Sparks-David,Aggregator,Tier 2,Global,2007,3922527,Active
-CLIENT_00071,Pham LLC,Independent,Tier 2,Europe,2011,4468779,On Hold
-CLIENT_00072,Vasquez PLC,Aggregator,Tier 3,APAC,2012,417614,Active
-CLIENT_00073,"Arnold, Fowler and Richmond",Broadcaster,Tier 3,Global,1993,2913349,On Hold
-CLIENT_00074,Wilson-Hill,Independent,Tier 3,North America,1997,171202,Active
-CLIENT_00075,"Patterson, Pearson and Mclaughlin",Aggregator,Tier 3,LATAM,2007,1948752,Active
-CLIENT_00076,Benson-Fields,Major Studio,Tier 2,APAC,2020,4043355,Active
-CLIENT_00077,"Evans, Valencia and Peterson",Streaming Service,Tier 3,Global,2006,1209496,Active
-CLIENT_00078,Erickson and Sons,Independent,Tier 3,North America,2023,1019614,Active
-CLIENT_00079,Blevins LLC,Broadcaster,Tier 2,Europe,2012,4896749,On Hold
-CLIENT_00080,Williamson-Ramirez,Aggregator,Tier 3,APAC,1994,3890354,Active
-CLIENT_00081,Ramsey-Mccoy,Aggregator,Tier 3,North America,2024,326033,Active
-CLIENT_00082,"Miller, Baker and Dorsey",Aggregator,Tier 2,LATAM,2021,2501422,Active
-CLIENT_00083,Price and Sons,Broadcaster,Tier 2,Europe,2008,335660,Active
-CLIENT_00084,"Wilson, Valencia and Howe",Independent,Tier 3,Europe,2022,2757996,Active
-CLIENT_00085,"Sharp, Wolf and Davies",Independent,Tier 2,Global,2011,971807,Active
-CLIENT_00086,Small-Adams,Independent,Tier 3,Global,2008,2699432,Active
-CLIENT_00087,Ochoa-Jones,Broadcaster,Tier 3,Europe,1996,4172357,Active
-CLIENT_00088,Bryant PLC,Aggregator,Tier 1,APAC,2000,1400879,Active
-CLIENT_00089,Harris Inc,Streaming Service,Tier 3,LATAM,2000,3490637,Active
-CLIENT_00090,Franklin Group,Aggregator,Tier 3,LATAM,1998,2220530,Active
-CLIENT_00091,"Anderson, Newman and Burns",Streaming Service,Tier 3,Europe,2010,1769403,Active
-CLIENT_00092,Smith and Sons,Aggregator,Tier 3,North America,1995,1676468,Active
-CLIENT_00093,Curtis LLC,Broadcaster,Tier 3,Global,2012,2660212,Active
-CLIENT_00094,Larson PLC,Independent,Tier 3,Global,1998,2469552,Active
-CLIENT_00095,"Butler, Ibarra and Craig",Aggregator,Tier 2,APAC,2004,3946542,Active
-CLIENT_00096,Hernandez Group,Major Studio,Tier 1,North America,2018,372227,Active
-CLIENT_00097,"Brown, Tucker and Hudson",Aggregator,Tier 3,Global,2013,1457154,Active
-CLIENT_00098,Doyle-Salazar,Broadcaster,Tier 1,LATAM,2020,1893580,Active
-CLIENT_00099,Soto-Martinez,Broadcaster,Tier 1,North America,1995,1815018,On Hold
-CLIENT_00100,Young Ltd,Independent,Tier 1,Global,2013,1829739,Active
-CLIENT_00101,Campbell-Holt,Major Studio,Tier 1,Europe,2014,1738596,Active
-CLIENT_00102,Page-Hays,Streaming Service,Tier 3,Global,2005,2362600,Active
-CLIENT_00103,Pearson-Choi,Major Studio,Tier 3,North America,2011,467046,On Hold
-CLIENT_00104,"Boyd, Santiago and Thompson",Major Studio,Tier 2,North America,1991,4090173,Active
-CLIENT_00105,Saunders-Porter,Independent,Tier 3,Global,2019,2407509,Active
-CLIENT_00106,Brewer-Yu,Independent,Tier 1,Europe,2019,3185872,Active
-CLIENT_00107,"Vargas, Gonzalez and Gould",Independent,Tier 2,Global,2014,2653126,Active
-CLIENT_00108,Ellison-Nichols,Aggregator,Tier 1,Europe,2022,3740307,Active
-CLIENT_00109,"Mills, Hernandez and Ross",Broadcaster,Tier 2,APAC,2023,2953139,Active
-CLIENT_00110,"Vasquez, Richardson and Levy",Broadcaster,Tier 1,Global,1992,3300344,Active
-CLIENT_00111,"Crane, Powers and Villarreal",Major Studio,Tier 3,Europe,2000,2564613,Active
-CLIENT_00112,Garrett-Terrell,Major Studio,Tier 2,North America,2006,3041697,Active
-CLIENT_00113,King LLC,Independent,Tier 1,North America,2005,2694109,Active
-CLIENT_00114,"Pineda, Bernard and Elliott",Major Studio,Tier 3,LATAM,1990,2869793,Active
-CLIENT_00115,"Ramirez, Williams and Cowan",Aggregator,Tier 3,Global,1995,501483,Active
-CLIENT_00116,"Hunter, Powell and Franklin",Independent,Tier 2,Europe,2020,4450229,Active
-CLIENT_00117,Anderson PLC,Streaming Service,Tier 2,LATAM,2017,258822,On Hold
-CLIENT_00118,"Bishop, Smith and Mccall",Streaming Service,Tier 3,North America,2008,535311,Active
-CLIENT_00119,"Myers, Gutierrez and Ballard",Streaming Service,Tier 1,Europe,1996,1568486,Active
-CLIENT_00120,"Gallegos, Mcpherson and Butler",Broadcaster,Tier 3,Europe,2019,3252205,Active
-CLIENT_00121,Barr Inc,Broadcaster,Tier 3,North America,2014,4971581,Active
-CLIENT_00122,"Quinn, Zimmerman and Warren",Major Studio,Tier 2,Global,2019,863895,Active
-CLIENT_00123,Morgan PLC,Major Studio,Tier 1,North America,2013,131557,Active
-CLIENT_00124,Adams and Sons,Independent,Tier 1,Europe,2003,1174883,Active
-CLIENT_00125,Sanchez-Wilkerson,Broadcaster,Tier 2,APAC,2020,3465219,Active
-CLIENT_00126,Malone Ltd,Broadcaster,Tier 3,LATAM,2009,2676672,Active
-CLIENT_00127,West Ltd,Streaming Service,Tier 3,APAC,2020,4249400,Active
-CLIENT_00128,Hahn Ltd,Aggregator,Tier 1,APAC,2014,465780,Active
-CLIENT_00129,Gregory-Anderson,Aggregator,Tier 1,Europe,2015,3991712,Active
-CLIENT_00130,Wright-Cook,Major Studio,Tier 1,APAC,2004,4230961,Active
-CLIENT_00131,Richards Ltd,Major Studio,Tier 2,North America,2015,3009165,Active
-CLIENT_00132,"Gould, Castaneda and Jennings",Independent,Tier 3,North America,2017,2047448,On Hold
-CLIENT_00133,Butler PLC,Aggregator,Tier 2,Global,2006,184874,On Hold
-CLIENT_00134,"Hines, Curry and Smith",Major Studio,Tier 1,Europe,1996,1603384,Active
-CLIENT_00135,Rowe PLC,Aggregator,Tier 2,North America,2007,3877802,Active
-CLIENT_00136,"Martin, Rivera and Vazquez",Aggregator,Tier 1,Global,2001,820421,Active
-CLIENT_00137,Ho Ltd,Broadcaster,Tier 1,Europe,1997,2214267,Active
-CLIENT_00138,Small LLC,Major Studio,Tier 1,Global,2000,3593519,On Hold
-CLIENT_00139,Perez-Edwards,Major Studio,Tier 3,Global,1995,3207589,Active
-CLIENT_00140,Smith-Mason,Streaming Service,Tier 2,Global,2024,3498246,Active
-CLIENT_00141,"Smith, Joseph and Peterson",Broadcaster,Tier 3,APAC,2008,4229039,Active
-CLIENT_00142,"Huff, Keller and Hall",Broadcaster,Tier 3,APAC,2001,4524406,On Hold
-CLIENT_00143,"Smith, Hicks and Bailey",Streaming Service,Tier 3,Global,2024,677800,Active
-CLIENT_00144,Jimenez Ltd,Independent,Tier 3,Global,2007,1549055,Active
-CLIENT_00145,"Hall, Singleton and Garcia",Independent,Tier 1,North America,1996,3312188,Active
-CLIENT_00146,"Perkins, Sanders and Hines",Major Studio,Tier 3,LATAM,1999,1712964,On Hold
-CLIENT_00147,"Massey, Ray and Nguyen",Independent,Tier 1,APAC,1992,2488152,Active
-CLIENT_00148,Hall Inc,Major Studio,Tier 1,Europe,2012,160243,Active
-CLIENT_00149,Cox-Washington,Streaming Service,Tier 2,Global,1992,3647203,Active
-CLIENT_00150,Jones-Frazier,Major Studio,Tier 1,North America,2024,2802673,Active
-CLIENT_00151,Davidson Ltd,Broadcaster,Tier 3,Europe,1991,3075823,On Hold
-CLIENT_00152,Reyes-Wolfe,Broadcaster,Tier 2,Europe,2015,3986796,Active
-CLIENT_00153,Green and Sons,Major Studio,Tier 1,Global,1998,2708704,Active
-CLIENT_00154,Martinez-Evans,Broadcaster,Tier 2,Global,1992,4638300,On Hold
-CLIENT_00155,Lam Group,Independent,Tier 1,APAC,2023,2571719,On Hold
-CLIENT_00156,"Lewis, Ramirez and Lowe",Broadcaster,Tier 3,Europe,2002,4600097,On Hold
-CLIENT_00157,Haley Ltd,Independent,Tier 3,North America,2020,1123978,On Hold
-CLIENT_00158,Jones-Crawford,Aggregator,Tier 3,Europe,2013,797311,Active
-CLIENT_00159,Jones PLC,Independent,Tier 2,Europe,1993,4127566,Active
-CLIENT_00160,"Carroll, Ellis and Ramirez",Streaming Service,Tier 3,North America,2016,1285230,Active
-CLIENT_00161,"Smith, Nguyen and Morales",Major Studio,Tier 2,APAC,1990,426247,Active
-CLIENT_00162,"Lloyd, Jordan and Taylor",Independent,Tier 3,LATAM,2004,813682,On Hold
-CLIENT_00163,Patterson Inc,Independent,Tier 1,Global,2015,1679334,Active
-CLIENT_00164,"Hayes, Burns and Hahn",Major Studio,Tier 1,APAC,2013,3912968,Active
-CLIENT_00165,"Hester, Waller and Kelley",Broadcaster,Tier 2,North America,2014,3323390,Active
-CLIENT_00166,"Rogers, Garcia and Cooper",Broadcaster,Tier 3,North America,1994,2367265,On Hold
-CLIENT_00167,Flores-Wilson,Streaming Service,Tier 2,APAC,2012,162691,Active
-CLIENT_00168,Henry-Murphy,Streaming Service,Tier 3,Europe,1993,4111814,Active
-CLIENT_00169,Chaney Ltd,Streaming Service,Tier 1,Europe,2015,3290498,On Hold
-CLIENT_00170,Clark PLC,Streaming Service,Tier 1,Global,2008,454978,Active
-CLIENT_00171,Sampson-Fleming,Aggregator,Tier 2,Europe,2007,2256250,Active
-CLIENT_00172,Barry Group,Broadcaster,Tier 3,Europe,2001,2539453,Active
-CLIENT_00173,"Thornton, Ramos and Lopez",Streaming Service,Tier 1,APAC,2015,180919,Active
-CLIENT_00174,"Mora, Henson and Morrow",Independent,Tier 2,APAC,2009,4138477,On Hold
-CLIENT_00175,"Herrera, Cross and Williams",Streaming Service,Tier 1,LATAM,1990,3293322,On Hold
-CLIENT_00176,Mercer-Wright,Streaming Service,Tier 3,APAC,2011,2818277,Active
-CLIENT_00177,Flores PLC,Streaming Service,Tier 3,LATAM,1990,183495,Active
-CLIENT_00178,Scott PLC,Aggregator,Tier 1,North America,2006,2302914,Active
-CLIENT_00179,"Lawson, Jones and Sullivan",Independent,Tier 2,APAC,2014,2075081,Active
-CLIENT_00180,Decker-Simpson,Independent,Tier 3,APAC,2012,4244253,Active
-CLIENT_00181,Walker Ltd,Aggregator,Tier 2,Europe,2022,1637988,Active
-CLIENT_00182,Spears-Mills,Aggregator,Tier 2,APAC,2012,122669,Active
-CLIENT_00183,"Henry, Brown and Butler",Independent,Tier 3,Europe,2002,2809012,Active
-CLIENT_00184,Hanson LLC,Aggregator,Tier 2,North America,2020,3348137,Active
-CLIENT_00185,"Greer, Stone and Coleman",Major Studio,Tier 1,Global,1997,2904733,On Hold
-CLIENT_00186,"King, Cole and Jordan",Broadcaster,Tier 1,Global,2004,2803000,Active
-CLIENT_00187,"Johnson, Warren and Gordon",Major Studio,Tier 1,North America,2014,2904218,Active
-CLIENT_00188,"Becker, Tucker and Buck",Streaming Service,Tier 2,APAC,2003,3661638,On Hold
-CLIENT_00189,Allen Inc,Major Studio,Tier 2,LATAM,2021,1362381,On Hold
-CLIENT_00190,"Daniels, Davis and Bryan",Independent,Tier 2,Global,2003,671877,On Hold
-CLIENT_00191,"Miller, Robertson and Henderson",Major Studio,Tier 3,APAC,2024,2674666,Active
-CLIENT_00192,Steele-Larsen,Streaming Service,Tier 2,North America,2007,287916,On Hold
-CLIENT_00193,"Mathis, Potter and Hanson",Aggregator,Tier 2,APAC,2023,3357508,Active
-CLIENT_00194,Hart-Jones,Independent,Tier 2,LATAM,2012,473025,Active
-CLIENT_00195,"Bryant, Fisher and Le",Aggregator,Tier 1,North America,2008,3357281,Active
-CLIENT_00196,Taylor Ltd,Major Studio,Tier 1,Europe,2016,240497,Active
-CLIENT_00197,"Clark, Huynh and Thompson",Aggregator,Tier 3,North America,2001,3494753,On Hold
-CLIENT_00198,"Hopkins, Rodriguez and Pacheco",Major Studio,Tier 3,APAC,1996,3014227,Active
-CLIENT_00199,Maxwell-Reyes,Broadcaster,Tier 2,Global,1995,1501373,Active
+CLIENT_00000,Martin-Burch,Aggregator,Tier 3,LATAM,2007,2443971,On Hold
+CLIENT_00001,Rogers-Patel,Streaming Service,Tier 2,APAC,1990,938047,Active
+CLIENT_00002,King LLC,Broadcaster,Tier 1,North America,2012,1615890,Active
+CLIENT_00003,"Elliott, Chase and Johnson",Broadcaster,Tier 1,APAC,2017,219810,Active
+CLIENT_00004,Griffin-Gordon,Major Studio,Tier 2,Europe,2012,4815969,Active
+CLIENT_00005,Crane-Stephens,Streaming Service,Tier 1,LATAM,1995,4052099,Active
+CLIENT_00006,Williams Inc,Streaming Service,Tier 2,APAC,2012,3442504,Active
+CLIENT_00007,"Pierce, Snyder and Wong",Broadcaster,Tier 3,North America,1994,4459079,Active
+CLIENT_00008,Jenkins-Holland,Major Studio,Tier 2,North America,1991,3092861,On Hold
+CLIENT_00009,Roberts LLC,Independent,Tier 3,APAC,2005,3683550,Active
+CLIENT_00010,Glenn Inc,Streaming Service,Tier 1,LATAM,1994,1056376,On Hold
+CLIENT_00011,"Campbell, Myers and Jackson",Streaming Service,Tier 3,Europe,2022,832227,Active
+CLIENT_00012,"Long, Richard and Dunn",Broadcaster,Tier 2,Global,2023,4269213,Active
+CLIENT_00013,Hughes LLC,Independent,Tier 1,North America,2021,4844950,Active
+CLIENT_00014,Zimmerman Inc,Major Studio,Tier 3,North America,2023,2221791,Active
+CLIENT_00015,Anderson-Wilson,Broadcaster,Tier 3,LATAM,2023,2479230,Active
+CLIENT_00016,Parker Group,Major Studio,Tier 1,Global,2011,1847360,Active
+CLIENT_00017,Conrad PLC,Independent,Tier 1,APAC,2014,2268504,On Hold
+CLIENT_00018,"Hill, Bass and Gallagher",Major Studio,Tier 3,North America,2013,3040180,On Hold
+CLIENT_00019,"Fleming, Hamilton and Davis",Broadcaster,Tier 1,North America,2010,1107782,Active
+CLIENT_00020,"Gonzalez, Gross and Jenkins",Major Studio,Tier 2,North America,2015,1546855,Active
+CLIENT_00021,Harrison-Garrison,Streaming Service,Tier 1,APAC,1999,554331,Active
+CLIENT_00022,Baker-Holt,Streaming Service,Tier 3,Global,2021,1388572,Active
+CLIENT_00023,"Gay, Stanley and Reynolds",Broadcaster,Tier 1,North America,1999,2614900,Active
+CLIENT_00024,Holloway Inc,Aggregator,Tier 2,LATAM,2023,3525779,Active
+CLIENT_00025,Smith-Garcia,Broadcaster,Tier 2,North America,1991,4087703,On Hold
+CLIENT_00026,Wright LLC,Aggregator,Tier 3,LATAM,2007,3921620,Active
+CLIENT_00027,Castillo Ltd,Major Studio,Tier 2,Europe,2001,2627221,Active
+CLIENT_00028,Perez-Lynch,Streaming Service,Tier 3,APAC,2008,707997,Active
+CLIENT_00029,Beltran-Jackson,Broadcaster,Tier 3,LATAM,2018,3272021,Active
+CLIENT_00030,Leon-Estes,Independent,Tier 2,LATAM,2005,4147821,Active
+CLIENT_00031,Sparks-Blair,Independent,Tier 2,Europe,2023,368530,On Hold
+CLIENT_00032,"Hunt, Newman and Hampton",Major Studio,Tier 3,Global,1993,1242153,Active
+CLIENT_00033,"Lang, Padilla and Harper",Streaming Service,Tier 3,LATAM,2008,2932043,Active
+CLIENT_00034,Williams-Davis,Broadcaster,Tier 2,APAC,2016,3135661,Active
+CLIENT_00035,"Martin, Bryant and Johnson",Independent,Tier 3,North America,1998,412433,On Hold
+CLIENT_00036,York PLC,Independent,Tier 3,Europe,2017,4777000,Active
+CLIENT_00037,"Roach, Johnson and Bright",Streaming Service,Tier 3,North America,2001,4466700,On Hold
+CLIENT_00038,Simmons-Byrd,Broadcaster,Tier 2,Europe,2000,4417928,On Hold
+CLIENT_00039,Miller Group,Major Studio,Tier 3,LATAM,2007,4357797,Active
+CLIENT_00040,Browning LLC,Aggregator,Tier 2,Global,1996,1947375,Active
+CLIENT_00041,Villa-Parks,Major Studio,Tier 1,Global,1995,3818425,Active
+CLIENT_00042,Byrd-Roberts,Streaming Service,Tier 3,Europe,2021,3499484,Active
+CLIENT_00043,"Rios, Williams and Wood",Major Studio,Tier 1,North America,2022,2784670,Active
+CLIENT_00044,Randall-Greene,Streaming Service,Tier 1,North America,1990,3981460,Active
+CLIENT_00045,Garcia-Parker,Independent,Tier 3,North America,1992,3910845,Active
+CLIENT_00046,Mckinney Ltd,Independent,Tier 1,Global,2023,2873932,Active
+CLIENT_00047,Vasquez Inc,Aggregator,Tier 2,APAC,2003,4173282,Active
+CLIENT_00048,"Anderson, Murphy and Chase",Major Studio,Tier 2,APAC,1997,1503459,On Hold
+CLIENT_00049,Ward-Herman,Streaming Service,Tier 2,North America,2015,1960534,Active
+CLIENT_00050,Guerrero PLC,Independent,Tier 2,LATAM,2015,1055143,Active
+CLIENT_00051,Carson and Sons,Streaming Service,Tier 2,Global,1997,3787232,Active
+CLIENT_00052,"Henderson, Hodge and Green",Independent,Tier 3,LATAM,2014,3000535,Active
+CLIENT_00053,Paul PLC,Major Studio,Tier 3,Global,2015,3876587,Active
+CLIENT_00054,Lee-Montgomery,Streaming Service,Tier 1,North America,1996,1389805,Active
+CLIENT_00055,Miller-Elliott,Independent,Tier 3,Global,2014,2652320,On Hold
+CLIENT_00056,Wallace PLC,Broadcaster,Tier 2,North America,2020,3728542,Active
+CLIENT_00057,Scott-Briggs,Aggregator,Tier 1,Europe,1997,2575506,Active
+CLIENT_00058,Brown-Rivera,Independent,Tier 1,LATAM,2018,1266763,Active
+CLIENT_00059,"Espinoza, Brewer and Parks",Broadcaster,Tier 2,Global,1992,4673470,Active
+CLIENT_00060,"Lane, Morgan and Miller",Aggregator,Tier 2,APAC,2021,3288727,On Hold
+CLIENT_00061,Rangel-Gutierrez,Streaming Service,Tier 2,APAC,2023,4119618,Active
+CLIENT_00062,"Edwards, Bell and Cooke",Major Studio,Tier 1,Europe,2004,967975,Active
+CLIENT_00063,Fisher Inc,Broadcaster,Tier 1,North America,1995,2478146,On Hold
+CLIENT_00064,Webb-Ross,Independent,Tier 3,Global,1999,4478441,Active
+CLIENT_00065,Johnson-Carter,Aggregator,Tier 1,Europe,1993,2663302,Active
+CLIENT_00066,Zuniga PLC,Broadcaster,Tier 3,North America,2024,1958589,Active
+CLIENT_00067,Ortiz-Burns,Streaming Service,Tier 3,LATAM,2011,2842683,Active
+CLIENT_00068,"Schmidt, Burns and Elliott",Streaming Service,Tier 2,APAC,2018,880660,Active
+CLIENT_00069,Clements PLC,Independent,Tier 3,LATAM,2020,2284462,Active
+CLIENT_00070,"Peterson, Montes and Cooper",Independent,Tier 1,APAC,2023,411875,Active
+CLIENT_00071,"Lynn, Lee and Sanders",Major Studio,Tier 2,APAC,1994,2823567,Active
+CLIENT_00072,Mullins PLC,Independent,Tier 2,North America,1990,3363010,On Hold
+CLIENT_00073,Salazar PLC,Aggregator,Tier 2,LATAM,2007,3908879,Active
+CLIENT_00074,"Roach, Simmons and French",Broadcaster,Tier 1,APAC,2016,2900367,Active
+CLIENT_00075,Gutierrez and Sons,Broadcaster,Tier 3,LATAM,2006,1479245,Active
+CLIENT_00076,"Fields, Evans and Gardner",Major Studio,Tier 3,LATAM,2006,3766269,On Hold
+CLIENT_00077,Walters Ltd,Independent,Tier 1,APAC,1992,3822194,On Hold
+CLIENT_00078,Frazier-Garcia,Independent,Tier 1,North America,2005,1531873,Active
+CLIENT_00079,"Mendoza, Robertson and Butler",Broadcaster,Tier 3,APAC,2000,4690161,Active
+CLIENT_00080,Humphrey Inc,Independent,Tier 1,APAC,1998,4912350,Active
+CLIENT_00081,Conrad LLC,Independent,Tier 2,Global,1998,4330140,Active
+CLIENT_00082,Duarte-Frank,Major Studio,Tier 1,Global,2000,2387695,Active
+CLIENT_00083,Mcfarland PLC,Independent,Tier 3,LATAM,2022,3027652,On Hold
+CLIENT_00084,Koch-Gonzalez,Major Studio,Tier 3,Europe,2019,1220840,Active
+CLIENT_00085,Wheeler Ltd,Independent,Tier 3,Global,2014,4668081,Active
+CLIENT_00086,"Edwards, Hines and Knight",Independent,Tier 2,Global,2006,3313178,On Hold
+CLIENT_00087,"Brown, Knapp and Joyce",Aggregator,Tier 3,Global,1998,1340899,Active
+CLIENT_00088,Jimenez LLC,Aggregator,Tier 1,Europe,1993,1057646,Active
+CLIENT_00089,Gray-West,Independent,Tier 1,Europe,1994,4511171,Active
+CLIENT_00090,Davis-Mann,Major Studio,Tier 1,LATAM,1994,4635073,Active
+CLIENT_00091,Wilson-Harris,Broadcaster,Tier 3,Europe,2021,3730094,Active
+CLIENT_00092,Bennett-Lee,Aggregator,Tier 1,LATAM,2007,4794580,Active
+CLIENT_00093,Warren Group,Aggregator,Tier 2,Global,2023,2535012,Active
+CLIENT_00094,Newton Group,Independent,Tier 1,APAC,2004,1204403,Active
+CLIENT_00095,Mcneil-Smith,Aggregator,Tier 3,Global,1995,922780,Active
+CLIENT_00096,"Lowery, Bailey and Camacho",Broadcaster,Tier 2,Global,2016,1744910,Active
+CLIENT_00097,"Vasquez, Stanton and Robinson",Aggregator,Tier 1,Europe,2006,3568131,On Hold
+CLIENT_00098,"Crawford, Villarreal and Phillips",Streaming Service,Tier 3,LATAM,2017,3937517,Active
+CLIENT_00099,"Smith, Gentry and Sparks",Major Studio,Tier 2,Europe,2000,3000517,Active
+CLIENT_00100,Payne-Adams,Major Studio,Tier 2,Global,2000,1633681,Active
+CLIENT_00101,Ford Group,Aggregator,Tier 3,Global,2007,4053178,On Hold
+CLIENT_00102,Pearson Inc,Broadcaster,Tier 2,Global,2001,1670378,Active
+CLIENT_00103,"Nicholson, Pierce and Riggs",Broadcaster,Tier 1,Global,2000,123008,Active
+CLIENT_00104,"Mccormick, Sellers and Lee",Major Studio,Tier 2,North America,2017,4843611,Active
+CLIENT_00105,"Allen, Clayton and Leonard",Streaming Service,Tier 3,Global,2010,570362,Active
+CLIENT_00106,Cooke-Park,Streaming Service,Tier 1,LATAM,2010,4350455,Active
+CLIENT_00107,"Bell, Miller and Carter",Broadcaster,Tier 2,APAC,1990,2693666,Active
+CLIENT_00108,"Haley, Ruiz and Waters",Streaming Service,Tier 2,LATAM,1998,3751209,Active
+CLIENT_00109,"Shelton, Gutierrez and Williamson",Major Studio,Tier 3,Europe,2008,594673,Active
+CLIENT_00110,Yang-Jimenez,Streaming Service,Tier 1,LATAM,2011,4221814,Active
+CLIENT_00111,Rice Ltd,Major Studio,Tier 1,LATAM,2007,4399620,Active
+CLIENT_00112,Jenkins-Mcclure,Streaming Service,Tier 1,Global,2011,2764339,On Hold
+CLIENT_00113,"Conner, Ferguson and Sanchez",Major Studio,Tier 3,North America,2022,380426,Active
+CLIENT_00114,"Bennett, Miller and Wilson",Streaming Service,Tier 3,APAC,1990,221894,Active
+CLIENT_00115,Simpson Group,Independent,Tier 2,APAC,2021,2979192,Active
+CLIENT_00116,Thomas and Sons,Streaming Service,Tier 2,APAC,2020,1643184,On Hold
+CLIENT_00117,Ross and Sons,Aggregator,Tier 3,Europe,2019,2386095,Active
+CLIENT_00118,Cooper Ltd,Independent,Tier 2,APAC,1994,1250748,Active
+CLIENT_00119,Moss-Rasmussen,Broadcaster,Tier 2,North America,2017,3036324,Active
+CLIENT_00120,Johnson-Phillips,Aggregator,Tier 2,North America,1991,106499,On Hold
+CLIENT_00121,"Vargas, Sweeney and Torres",Independent,Tier 1,Global,2003,3328946,Active
+CLIENT_00122,"Scott, Warner and Benson",Streaming Service,Tier 3,Global,2009,4688438,Active
+CLIENT_00123,Leach-Miller,Major Studio,Tier 3,North America,2013,2026115,Active
+CLIENT_00124,"Simmons, Sutton and Williams",Aggregator,Tier 2,North America,2008,4027519,Active
+CLIENT_00125,Schneider-Hunter,Independent,Tier 1,LATAM,2003,2266341,Active
+CLIENT_00126,Andrews-Wilson,Streaming Service,Tier 2,APAC,2013,3800149,Active
+CLIENT_00127,"Chapman, Flowers and Randolph",Independent,Tier 3,Global,2004,1407021,Active
+CLIENT_00128,"Thomas, Elliott and Bird",Independent,Tier 1,North America,2010,2362790,Active
+CLIENT_00129,Best-Burke,Streaming Service,Tier 3,LATAM,2007,2667807,Active
+CLIENT_00130,Miller and Sons,Broadcaster,Tier 1,LATAM,2017,548555,Active
+CLIENT_00131,"Armstrong, Green and Fox",Independent,Tier 2,APAC,2022,3913872,Active
+CLIENT_00132,"Nelson, Stanton and Wilson",Streaming Service,Tier 3,LATAM,2010,2116388,Active
+CLIENT_00133,Carr-Gonzalez,Broadcaster,Tier 2,APAC,2018,4247468,On Hold
+CLIENT_00134,"Hunt, Mann and Hall",Major Studio,Tier 1,LATAM,2001,2792688,Active
+CLIENT_00135,Sosa-Black,Independent,Tier 1,North America,2015,2981722,Active
+CLIENT_00136,Reilly LLC,Independent,Tier 2,Europe,2006,1669432,Active
+CLIENT_00137,Adams-Jennings,Major Studio,Tier 1,APAC,1996,3981403,Active
+CLIENT_00138,"Tucker, Murphy and Cain",Broadcaster,Tier 2,North America,2019,232075,Active
+CLIENT_00139,Adkins Group,Broadcaster,Tier 2,APAC,2006,3181928,Active
+CLIENT_00140,"Perry, Mcgee and Joseph",Streaming Service,Tier 1,APAC,1998,785971,On Hold
+CLIENT_00141,Pope-Mueller,Broadcaster,Tier 2,Global,1997,4288353,Active
+CLIENT_00142,Graves-Sexton,Aggregator,Tier 1,Global,2017,1364276,Active
+CLIENT_00143,Smith-King,Aggregator,Tier 2,LATAM,2020,3185813,Active
+CLIENT_00144,"Medina, Tate and Watson",Broadcaster,Tier 3,Global,1994,1417286,On Hold
+CLIENT_00145,"Carter, Brewer and Salazar",Streaming Service,Tier 2,LATAM,2013,3385051,On Hold
+CLIENT_00146,Brown-Caldwell,Broadcaster,Tier 3,LATAM,2001,2572803,On Hold
+CLIENT_00147,"Doyle, Roberson and Guzman",Independent,Tier 3,North America,1992,1201418,Active
+CLIENT_00148,Houston-Graves,Streaming Service,Tier 1,Global,2023,3409080,Active
+CLIENT_00149,"Stewart, Riddle and Molina",Streaming Service,Tier 2,Global,1995,3827704,Active
+CLIENT_00150,Young-Todd,Broadcaster,Tier 1,Global,2003,792839,Active
+CLIENT_00151,"Norton, Wade and Benjamin",Major Studio,Tier 1,LATAM,2018,4634632,Active
+CLIENT_00152,"Medina, Boyle and Oconnell",Major Studio,Tier 1,North America,1990,4299811,On Hold
+CLIENT_00153,"Morris, Ellis and Rojas",Streaming Service,Tier 3,Europe,2011,1824060,Active
+CLIENT_00154,Flores Ltd,Aggregator,Tier 3,Europe,2009,1012086,On Hold
+CLIENT_00155,Bowers Group,Aggregator,Tier 1,LATAM,1998,2473303,Active
+CLIENT_00156,Davis-Bautista,Major Studio,Tier 2,APAC,2017,275863,Active
+CLIENT_00157,"Lawrence, Scott and Hale",Aggregator,Tier 3,Europe,2011,1978570,Active
+CLIENT_00158,"Bishop, Hill and Flowers",Streaming Service,Tier 2,APAC,2006,536848,Active
+CLIENT_00159,"Ross, Ochoa and West",Broadcaster,Tier 3,APAC,1997,1585814,On Hold
+CLIENT_00160,Jackson-Berry,Aggregator,Tier 2,LATAM,2024,2626849,Active
+CLIENT_00161,Crosby-Willis,Streaming Service,Tier 3,North America,1993,2524558,Active
+CLIENT_00162,King Ltd,Broadcaster,Tier 3,Global,2006,2187415,Active
+CLIENT_00163,Johnson-Soto,Major Studio,Tier 2,LATAM,1999,3646969,Active
+CLIENT_00164,Davis Inc,Independent,Tier 2,LATAM,2012,408937,On Hold
+CLIENT_00165,Hopkins-Owens,Major Studio,Tier 2,Global,2021,1594372,On Hold
+CLIENT_00166,"Wood, Campbell and Ellis",Independent,Tier 3,North America,2007,325943,Active
+CLIENT_00167,"Hudson, Cohen and Mueller",Independent,Tier 1,Europe,1996,2613800,Active
+CLIENT_00168,Neal LLC,Aggregator,Tier 3,North America,2017,4369507,Active
+CLIENT_00169,Perez Inc,Independent,Tier 3,APAC,2010,1799587,Active
+CLIENT_00170,Walker and Sons,Independent,Tier 3,North America,2002,2108954,Active
+CLIENT_00171,"King, Garcia and Romero",Streaming Service,Tier 2,Global,2015,4500140,Active
+CLIENT_00172,Randall-Yu,Aggregator,Tier 2,APAC,1997,3367838,On Hold
+CLIENT_00173,White PLC,Independent,Tier 1,APAC,2000,4905018,Active
+CLIENT_00174,Green-Smith,Broadcaster,Tier 2,North America,1995,3944625,On Hold
+CLIENT_00175,"Thomas, Morse and Chan",Broadcaster,Tier 1,Global,2011,2733626,Active
+CLIENT_00176,"Ramirez, Hopkins and Johnson",Aggregator,Tier 1,APAC,2001,4541781,Active
+CLIENT_00177,"Bartlett, Hunter and Holmes",Major Studio,Tier 2,APAC,2000,2315356,Active
+CLIENT_00178,"Odonnell, White and Robertson",Broadcaster,Tier 2,Europe,1993,4661446,Active
+CLIENT_00179,"Sullivan, Solomon and Estrada",Broadcaster,Tier 3,LATAM,2000,4829624,Active
+CLIENT_00180,Coleman-Bell,Major Studio,Tier 1,APAC,2017,3460654,Active
+CLIENT_00181,Perkins and Sons,Independent,Tier 3,LATAM,2023,1785747,Active
+CLIENT_00182,"Bradford, Andrews and Brooks",Independent,Tier 2,Europe,2014,1371781,Active
+CLIENT_00183,Perez and Sons,Broadcaster,Tier 2,North America,2001,4524686,Active
+CLIENT_00184,Berry PLC,Aggregator,Tier 3,North America,2020,2774580,Active
+CLIENT_00185,"Torres, Moss and Robertson",Streaming Service,Tier 3,Global,2002,368956,Active
+CLIENT_00186,Carroll-Sanchez,Streaming Service,Tier 1,LATAM,2014,1113588,Active
+CLIENT_00187,"Garcia, Kim and Williams",Streaming Service,Tier 2,Europe,2001,3848835,Active
+CLIENT_00188,Lopez-Liu,Aggregator,Tier 2,North America,2000,3997002,Active
+CLIENT_00189,"Osborne, Wood and Lopez",Aggregator,Tier 1,Europe,1997,1859620,Active
+CLIENT_00190,"Brooks, Sanders and Rogers",Major Studio,Tier 2,LATAM,2003,1620161,Active
+CLIENT_00191,"Torres, Johnson and Flores",Aggregator,Tier 1,LATAM,2005,3738938,Active
+CLIENT_00192,Moore-Rivera,Streaming Service,Tier 2,APAC,2006,1789739,Active
+CLIENT_00193,Vaughn and Sons,Major Studio,Tier 2,North America,2015,1954377,Active
+CLIENT_00194,King-Thompson,Independent,Tier 2,APAC,2003,3287767,On Hold
+CLIENT_00195,Bennett-Thompson,Major Studio,Tier 2,APAC,1999,1638173,Active
+CLIENT_00196,Serrano-Williams,Independent,Tier 3,North America,2015,1667103,Active
+CLIENT_00197,Tyler Inc,Broadcaster,Tier 3,APAC,1990,3172274,Active
+CLIENT_00198,Lopez Inc,Streaming Service,Tier 2,APAC,1998,319222,Active
+CLIENT_00199,Lyons-Ryan,Major Studio,Tier 1,Global,2024,3026999,On Hold

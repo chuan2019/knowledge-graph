@@ -1,51 +1,51 @@
 region_id,region_name,continent
-REG_001,Niue,M
-REG_002,French Polynesia,L
-REG_003,Bahrain,L
-REG_004,Mongolia,A
-REG_005,Guam,L
-REG_006,Montserrat,N
-REG_007,Belize,A
-REG_008,Tajikistan,E
-REG_009,Gibraltar,E
-REG_010,Dominican Republic,N
-REG_011,Romania,M
-REG_012,Mayotte,N
-REG_013,Nauru,M
-REG_014,Angola,M
-REG_015,Dominica,L
-REG_016,Sudan,L
-REG_017,Serbia,E
-REG_018,Canada,L
-REG_019,Jordan,L
-REG_020,Ukraine,M
-REG_021,Spain,L
-REG_022,Suriname,A
-REG_023,Guatemala,E
-REG_024,Montserrat,L
-REG_025,Guam,L
-REG_026,Marshall Islands,A
-REG_027,Cook Islands,L
-REG_028,Australia,A
-REG_029,Guinea-Bissau,L
-REG_030,Haiti,A
-REG_031,San Marino,A
-REG_032,Greenland,A
-REG_033,Botswana,A
-REG_034,New Zealand,L
-REG_035,Italy,E
-REG_036,Belgium,N
-REG_037,Philippines,L
-REG_038,Hong Kong,N
-REG_039,Vanuatu,E
-REG_040,Russian Federation,A
-REG_041,Liberia,N
-REG_042,Poland,A
-REG_043,Czech Republic,M
-REG_044,North Macedonia,M
-REG_045,Guam,A
-REG_046,Libyan Arab Jamahiriya,M
-REG_047,Greece,A
-REG_048,Bulgaria,M
-REG_049,United Kingdom,A
-REG_050,Morocco,A
+REG_001,Greenland,A
+REG_002,Marshall Islands,M
+REG_003,Bermuda,E
+REG_004,Honduras,M
+REG_005,Bulgaria,E
+REG_006,Antigua and Barbuda,E
+REG_007,Trinidad and Tobago,N
+REG_008,Brazil,A
+REG_009,British Indian Ocean Territory (Chagos Archipelago),E
+REG_010,Maldives,L
+REG_011,Liechtenstein,L
+REG_012,Macao,A
+REG_013,Botswana,E
+REG_014,Georgia,A
+REG_015,Mongolia,M
+REG_016,Anguilla,N
+REG_017,Faroe Islands,A
+REG_018,Saint Lucia,M
+REG_019,Niger,E
+REG_020,British Virgin Islands,L
+REG_021,Ukraine,L
+REG_022,Syrian Arab Republic,N
+REG_023,Gambia,A
+REG_024,Moldova,A
+REG_025,Hungary,L
+REG_026,Falkland Islands (Malvinas),N
+REG_027,Guam,N
+REG_028,Guernsey,A
+REG_029,Albania,N
+REG_030,Ukraine,M
+REG_031,Lao People's Democratic Republic,E
+REG_032,American Samoa,A
+REG_033,Egypt,A
+REG_034,Iran,N
+REG_035,Saint Helena,N
+REG_036,Haiti,A
+REG_037,Thailand,M
+REG_038,Kyrgyz Republic,M
+REG_039,Western Sahara,A
+REG_040,Turkmenistan,N
+REG_041,Micronesia,A
+REG_042,Austria,A
+REG_043,Kazakhstan,M
+REG_044,Saint Pierre and Miquelon,A
+REG_045,Marshall Islands,A
+REG_046,Saint Kitts and Nevis,E
+REG_047,Cape Verde,E
+REG_048,Togo,L
+REG_049,Bosnia and Herzegovina,M
+REG_050,Trinidad and Tobago,N
