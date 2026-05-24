@@ -139,10 +139,129 @@ Important:
 - the loader currently starts with `MATCH (n) DETACH DELETE n`
 - this clears the entire Neo4j database before reloading the demo data
 
+## FastAPI Question-Answering Service
+
+The repository now includes a FastAPI web service that lets a user submit a natural-language question, translates that question into read-only Cypher, executes the query against Neo4j, and sends the retrieved records to an LLM for a natural-language answer.
+
+The service code lives under:
+
+- [app/main.py](app/main.py)
+- [app/services/qa_service.py](app/services/qa_service.py)
+- [app/services/graph_store.py](app/services/graph_store.py)
+- [app/services/ollama_client.py](app/services/ollama_client.py)
+
+The QA flow is intentionally agentic in a narrow, practical sense:
+
+- plan a Cypher query from the user question
+- execute the query against Neo4j
+- repair and retry if Neo4j rejects the generated Cypher
+- synthesize a grounded answer from the retrieved rows
+
+### Prerequisites
+
+- Neo4j running locally
+- Ollama running locally
+- a local Ollama model pulled, for example:
+
+```bash
+ollama pull llama3.2
+```
+
+If you use Docker Compose from this repo, start Neo4j and Ollama with:
+
+```bash
+cd /home/chuan/Projects/knowledge-graph
+docker compose up -d neo4j ollama
+```
+
+To run the API in Docker as well:
+
+```bash
+cd /home/chuan/Projects/knowledge-graph
+docker compose up -d api neo4j ollama
+```
+
+In Docker Compose, the API container connects to Neo4j and Ollama over the internal service network using:
+
+- `NEO4J_URI=bolt://neo4j:7687`
+- `OLLAMA_BASE_URL=http://ollama:11434`
+
+### Start the API
+
+```bash
+cd /home/chuan/Projects/knowledge-graph
+uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+After the server starts, open the browser UI at:
+
+```text
+http://localhost:8000/
+```
+
+The page lets you submit a question, inspect the generated Cypher, and review the returned rows and agent trace.
+
+### Environment Variables
+
+The service uses these defaults:
+
+- `NEO4J_URI=bolt://localhost:7687`
+- `NEO4J_USER=neo4j`
+- `NEO4J_PASSWORD=testpass`
+- `NEO4J_DATABASE=neo4j`
+- `OLLAMA_BASE_URL=http://localhost:11434`
+- `OLLAMA_MODEL=llama3.2`
+
+Optional tuning:
+
+- `MAX_QUERY_RETRIES=2`
+- `RESULT_ROW_LIMIT=25`
+- `CYPHER_TIMEOUT_MS=15000`
+
+### API Endpoints
+
+- `GET /health`
+- `GET /schema`
+- `POST /api/ask`
+
+Example request:
+
+```bash
+curl -X POST http://localhost:8000/api/ask \
+	-H 'Content-Type: application/json' \
+	-d '{
+		"question": "Which Tier 1 clients have active rights for localized versions?",
+		"include_rows": true
+	}'
+```
+
+Example response shape:
+
+```json
+{
+	"question": "Which Tier 1 clients have active rights for localized versions?",
+	"answer": "...",
+	"cypher": "MATCH ... RETURN ... LIMIT 25",
+	"rows": [
+		{
+			"title_name": "...",
+			"client_name": "..."
+		}
+	],
+	"row_count": 12,
+	"agent_trace": [
+		"Received user question.",
+		"Planned Cypher on attempt 1.",
+		"Executed Cypher and retrieved 12 rows.",
+		"Synthesized natural-language answer."
+	]
+}
+```
+
 ## Example Workflow
 
 ```bash
-cd /home/chuan/Documents/My_Study/AI/knowledge-graph
+cd /home/chuan/Projects/knowledge-graph
 docker compose up -d neo4j
 uv sync
 uv run python kg4rag/kg-data-gen.py

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knowledge Graph QA</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero">
+        <p class="eyebrow">Knowledge Graph QA Service</p>
+        <h1>Ask the graph from your browser.</h1>
+        <p class="hero-copy">
+          Submit a natural-language question, inspect the generated Cypher, and review
+          the grounded rows and agent trace returned by the API.
+        </p>
+      </header>
+
+      <main class="layout">
+        <section class="panel input-panel">
+          <div class="panel-header">
+            <h2>Question</h2>
+            <span id="healthBadge" class="badge pending">Checking service...</span>
+          </div>
+
+          <form id="askForm" class="ask-form">
+            <label class="field-label" for="questionInput">Ask about rights, localization, delivery risk, or clients</label>
+            <textarea
+              id="questionInput"
+              name="question"
+              rows="6"
+              placeholder="Which Tier 1 clients have active rights for localized versions with delayed deliveries?"
+              required
+            ></textarea>
+
+            <div class="control-row">
+              <label class="checkbox-row">
+                <input id="includeRowsInput" type="checkbox" checked />
+                Include raw rows in the response
+              </label>
+              <input id="modelInput" type="text" placeholder="Optional model override, e.g. llama3.2" />
+            </div>
+
+            <div class="button-row">
+              <button id="submitButton" type="submit">Ask the graph</button>
+              <button id="sampleButton" type="button" class="ghost">Use sample question</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel output-panel">
+          <div class="panel-header">
+            <h2>Answer</h2>
+            <span id="statusText" class="status-text">Ready</span>
+          </div>
+          <div id="answerBox" class="answer-box empty">No answer yet.</div>
+        </section>
+
+        <section class="panel detail-panel">
+          <div class="panel-header">
+            <h2>Generated Cypher</h2>
+          </div>
+          <pre id="cypherBox" class="code-box empty">No query yet.</pre>
+        </section>
+
+        <section class="panel detail-panel">
+          <div class="panel-header">
+            <h2>Agent Trace</h2>
+          </div>
+          <ol id="traceList" class="trace-list empty">
+            <li>No trace yet.</li>
+          </ol>
+        </section>
+
+        <section class="panel detail-panel rows-panel">
+          <div class="panel-header">
+            <h2>Retrieved Rows</h2>
+            <span id="rowCount" class="badge">0 rows</span>
+          </div>
+          <div id="rowsBox" class="rows-box empty">No rows yet.</div>
+        </section>
+      </main>
+    </div>
+
+    <script src="/static/app.js" defer></script>
+  </body>
+  </html>
