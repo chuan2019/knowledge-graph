@@ -4,8 +4,8 @@ import unittest
 
 import httpx
 
-from app.config import Settings
-from app.errors import ServiceUnavailableError
+from app.core.config import Settings
+from app.core.errors import ServiceUnavailableError
 from app.services.ollama_client import OllamaClient
 
 

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 import re
-from typing import Any
+from typing import Any, LiteralString, cast
 
 from neo4j import GraphDatabase, Query
 
-from app.config import Settings
+from app.core.config import Settings
 
 FORBIDDEN_CYPHER_PATTERNS = [
     r"\bCREATE\b",
@@ -40,7 +40,7 @@ class GraphStore:
         with self._driver.session(database=self._settings.neo4j_database) as session:
             result = session.run(
                 Query(
-                    safe_query,
+                    cast(LiteralString, safe_query),
                     timeout=self._settings.cypher_timeout_ms / 1000,
                 )
             )

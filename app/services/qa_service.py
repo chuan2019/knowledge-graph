@@ -5,7 +5,7 @@ from typing import Any
 
 from neo4j.exceptions import CypherSyntaxError, Neo4jError
 
-from app.config import Settings
+from app.core.config import Settings
 from app.services.graph_store import GraphStore
 from app.services.ollama_client import OllamaClient
 

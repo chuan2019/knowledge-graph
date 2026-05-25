@@ -5,8 +5,8 @@ from typing import Any
 
 import httpx
 
-from app.config import Settings
-from app.errors import ServiceUnavailableError
+from app.core.config import Settings
+from app.core.errors import ServiceUnavailableError
 
 
 class OllamaClient:
