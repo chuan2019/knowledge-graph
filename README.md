@@ -229,13 +229,17 @@ Optional tuning:
 ### API Endpoints
 
 - `GET /health`
+- `GET /api/v1/metrics`
 - `GET /api/v1/schema`
 - `POST /api/v1/ask`
 
 Compatibility routes are also kept for the current browser UI and existing callers:
 
+- `GET /metrics`
 - `GET /schema`
 - `POST /api/ask`
+
+The metrics middleware tracks in-memory request counts, status codes, in-flight requests, exceptions, and per-route timing summaries. Responses also include an `X-Response-Time` header.
 
 Example request:
 

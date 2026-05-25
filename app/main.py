@@ -7,9 +7,11 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
 from app.api import ui as ui_router
+from app.api.v1 import metrics as metrics_router
 from app.api.v1 import qa as qa_router
 from app.config import Settings
 from app.errors import register_error_handlers
+from app.middleware import MetricsMiddleware, MetricsRegistry
 from app.models.qa import HealthResponse
 from app.services.graph_store import GraphStore
 from app.services.ollama_client import OllamaClient
@@ -47,10 +49,15 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
+metrics_registry = MetricsRegistry()
+app.state.metrics_registry = metrics_registry
+app.add_middleware(MetricsMiddleware, registry=metrics_registry)
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 register_error_handlers(app)
 app.include_router(ui_router.router)
+app.include_router(metrics_router.router, prefix="/api/v1")
 app.include_router(qa_router.router, prefix="/api/v1")
+app.include_router(metrics_router.legacy_router)
 app.include_router(qa_router.legacy_router)
 
 
