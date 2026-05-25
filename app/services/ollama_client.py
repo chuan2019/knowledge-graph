@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any
 
 import httpx
@@ -9,12 +10,16 @@ from app.core.config import Settings
 from app.core.errors import ServiceUnavailableError
 
 
+logger = logging.getLogger(__name__)
+
+
 class OllamaClient:
     def __init__(self, settings: Settings) -> None:
         self._settings = settings
         self._client = httpx.AsyncClient(base_url=settings.ollama_base_url, timeout=60.0)
 
     async def close(self) -> None:
+        logger.debug("Closing Ollama HTTP client")
         await self._client.aclose()
 
     async def generate_json(
@@ -59,8 +64,9 @@ class OllamaClient:
         format_name: str | None,
         temperature: float | None,
     ) -> str:
+        model_name = model or self._settings.ollama_model
         payload: dict[str, Any] = {
-            "model": model or self._settings.ollama_model,
+            "model": model_name,
             "system": system_prompt,
             "prompt": user_prompt,
             "stream": False,
@@ -75,12 +81,25 @@ class OllamaClient:
         if format_name is not None:
             payload["format"] = format_name
 
+        logger.debug(
+            "Calling Ollama generate API: model=%s format=%s prompt_length=%s",
+            model_name,
+            format_name or "text",
+            len(user_prompt),
+        )
+
         response = await self._client.post("/api/generate", json=payload)
         try:
             response.raise_for_status()
         except httpx.HTTPStatusError as exc:
             detail = self._extract_error_detail(response)
             requested_model = str(payload["model"])
+            logger.warning(
+                "Ollama request failed: status=%s model=%s detail=%s",
+                response.status_code,
+                requested_model,
+                detail,
+            )
             if response.status_code == 404 and requested_model in detail:
                 raise ServiceUnavailableError(
                     "Ollama",
@@ -98,7 +117,13 @@ class OllamaClient:
         data = response.json()
         content = data.get("response")
         if not isinstance(content, str) or not content.strip():
+            logger.warning("Ollama returned an empty response body for model=%s", model_name)
             raise ValueError("Ollama returned an empty response.")
+        logger.debug(
+            "Ollama request succeeded: model=%s response_length=%s",
+            model_name,
+            len(content.strip()),
+        )
         return content.strip()
 
     @staticmethod

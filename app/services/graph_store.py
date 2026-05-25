@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import logging
 import re
+import time
 from typing import Any, LiteralString, cast
 
 from neo4j import GraphDatabase, Query
@@ -24,6 +26,7 @@ LEGACY_EXISTS_PATTERN = re.compile(
     r"EXISTS\s*\(\s*(?P<pattern>\([^()]*\)(?:\s*(?:<?-\[[^\]]*\]-?>|<?--?>)\s*\([^()]*\))+?)\s*\)",
     flags=re.IGNORECASE | re.DOTALL,
 )
+logger = logging.getLogger(__name__)
 
 
 class GraphStore:
@@ -35,13 +38,18 @@ class GraphStore:
         )
 
     def verify_connectivity(self) -> None:
+        logger.debug("Verifying Neo4j driver connectivity to %s", self._settings.neo4j_uri)
         self._driver.verify_connectivity()
+        logger.info("Neo4j connectivity verified for database=%s", self._settings.neo4j_database)
 
     def close(self) -> None:
+        logger.debug("Closing Neo4j driver")
         self._driver.close()
 
     def run_read_query(self, query: str) -> list[dict[str, Any]]:
         safe_query = self._ensure_safe_read_query(query)
+        logger.debug("Executing read query against Neo4j: %s", safe_query)
+        start = time.perf_counter()
         with self._driver.session(database=self._settings.neo4j_database) as session:
             result = session.run(
                 Query(
@@ -50,6 +58,11 @@ class GraphStore:
                 )
             )
             rows = [dict(record.items()) for record in result]
+        logger.debug(
+            "Neo4j query completed: rows=%s duration_ms=%.3f",
+            len(rows),
+            (time.perf_counter() - start) * 1000,
+        )
         return rows
 
     def _ensure_safe_read_query(self, query: str) -> str:
@@ -57,22 +70,36 @@ class GraphStore:
         if not normalized_query:
             raise ValueError("Generated Cypher query is empty.")
 
+        original_query = normalized_query
         normalized_query = self._rewrite_legacy_exists_patterns(normalized_query)
         normalized_query = self._rewrite_bare_pattern_lines(normalized_query)
+
+        if normalized_query != original_query:
+            logger.debug(
+                "Normalized generated Cypher before execution. original=%s normalized=%s",
+                original_query,
+                normalized_query,
+            )
 
         upper_query = normalized_query.upper()
         for pattern in FORBIDDEN_CYPHER_PATTERNS:
             if re.search(pattern, upper_query):
+                logger.warning("Rejected unsafe Cypher due to forbidden pattern: %s", pattern)
                 raise ValueError(
                     "Generated Cypher contains write or admin operations, which are not allowed."
                 )
 
         if "RETURN" not in upper_query:
+            logger.warning("Rejected Cypher without RETURN clause: %s", normalized_query)
             raise ValueError("Generated Cypher must include a RETURN clause.")
 
         if "LIMIT" not in upper_query:
             normalized_query = (
                 f"{normalized_query}\nLIMIT {self._settings.result_row_limit}"
+            )
+            logger.debug(
+                "Appended default LIMIT %s to generated Cypher",
+                self._settings.result_row_limit,
             )
 
         return normalized_query

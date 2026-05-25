@@ -52,6 +52,26 @@ class GraphQAServiceUnitTestCase(unittest.IsolatedAsyncioTestCase):
         self.assertTrue(any("failed on attempt 1" in step for step in trace))
         self.assertEqual(self.ollama_client.generate_json.await_count, 2)
 
+    async def test_answer_question_logs_retry_failures(self) -> None:
+        self.ollama_client.generate_json = AsyncMock(
+            side_effect=[
+                {"cypher": "MATCH (n RETURN n", "rationale": "broken"},
+                {"cypher": "MATCH (n) RETURN n LIMIT 1", "rationale": "fixed"},
+            ]
+        )
+        self.graph_store.run_read_query.side_effect = [
+            ValueError("bad query"),
+            [{"name": "alpha"}],
+        ]
+        self.ollama_client.generate_text = AsyncMock(return_value="Recovered answer")
+
+        with self.assertLogs("app.services.qa_service", level="DEBUG") as captured:
+            await self.service.answer_question("test question")
+
+        self.assertTrue(
+            any("Cypher execution failed on attempt 1: bad query" in message for message in captured.output)
+        )
+
     async def test_answer_question_raises_after_exhausted_retries(self) -> None:
         self.ollama_client.generate_json = AsyncMock(
             return_value={"cypher": "MATCH (n RETURN n", "rationale": "broken"}
