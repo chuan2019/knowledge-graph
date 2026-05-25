@@ -45,6 +45,28 @@ class AppRoutesIntegrationTestCase(unittest.TestCase):
         self.assertIn("graph_schema", legacy_response.json())
         self.assertEqual(legacy_response.json(), versioned_response.json())
 
+    def test_metrics_routes_return_request_counters(self) -> None:
+        with TestClient(app) as client:
+            client.get("/health")
+            legacy_response = client.get("/metrics")
+            versioned_response = client.get("/api/v1/metrics")
+
+        self.assertEqual(legacy_response.status_code, 200)
+        self.assertEqual(versioned_response.status_code, 200)
+        self.assertIn("total_requests", legacy_response.json())
+        self.assertIn("paths", legacy_response.json())
+        self.assertGreaterEqual(
+            versioned_response.json()["total_requests"],
+            legacy_response.json()["total_requests"],
+        )
+        self.assertTrue(
+            any(item["path"] == "/health" for item in legacy_response.json()["paths"])
+        )
+        self.assertTrue(
+            any(item["path"] == "/metrics" for item in versioned_response.json()["paths"])
+        )
+        self.assertIn("X-Response-Time", legacy_response.headers)
+
     def test_legacy_ask_route_returns_stubbed_answer(self) -> None:
         with TestClient(app) as client:
             app.state.qa_service.answer_question = AsyncMock(
