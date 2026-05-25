@@ -1,6 +1,7 @@
 services:
 
   api:
+    profiles: ["all"]
     build:
       context: .
       dockerfile: Dockerfile.api
@@ -30,6 +31,7 @@ services:
       - kgrag_net
 
   neo4j:
+    profiles: ["all", "no_app"]
     image: neo4j:5.26.19
     container_name: neo4j-single
     ports:
@@ -58,6 +60,7 @@ services:
       - kgrag_net
 
   ollama:
+    profiles: ["all", "no_app"]
     image: ollama/ollama:latest
     container_name: ollama
     ports:
@@ -86,6 +89,7 @@ services:
               capabilities: [gpu]
 
   weaviate:
+    profiles: ["all", "no_app"]
     image: cr.weaviate.io/semitechnologies/weaviate:1.27.2
     container_name: weaviate
     ports:

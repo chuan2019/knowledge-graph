@@ -1,8 +1,7 @@
 # Python-generated files
 __pycache__/
-kg4rag/__pycache__/
 
 .venv
 .ipynb_checkpoints/
 volumes/
-models/
+./models/
