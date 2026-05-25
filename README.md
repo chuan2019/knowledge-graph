@@ -221,13 +221,18 @@ Optional tuning:
 ### API Endpoints
 
 - `GET /health`
+- `GET /api/v1/schema`
+- `POST /api/v1/ask`
+
+Compatibility routes are also kept for the current browser UI and existing callers:
+
 - `GET /schema`
 - `POST /api/ask`
 
 Example request:
 
 ```bash
-curl -X POST http://localhost:8000/api/ask \
+curl -X POST http://localhost:8000/api/v1/ask \
 	-H 'Content-Type: application/json' \
 	-d '{
 		"question": "Which Tier 1 clients have active rights for localized versions?",
