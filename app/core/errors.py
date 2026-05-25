@@ -36,15 +36,28 @@ def register_error_handlers(app: FastAPI) -> None:
     """Register global exception handlers on the FastAPI app."""
 
     @app.exception_handler(AppError)
-    async def app_error_handler(_request: Request, exc: AppError):
+    async def app_error_handler(request: Request, exc: AppError):
+        logger.warning(
+            "Application error on %s %s: %s detail=%s",
+            request.method,
+            request.url.path,
+            exc.message,
+            exc.detail,
+        )
         return JSONResponse(
             status_code=exc.status_code,
             content={"error": exc.message, "detail": exc.detail},
         )
 
     @app.exception_handler(Exception)
-    async def unhandled_error_handler(_request: Request, exc: Exception):
-        logger.error("Unhandled exception: %s\n%s", exc, traceback.format_exc())
+    async def unhandled_error_handler(request: Request, exc: Exception):
+        logger.error(
+            "Unhandled exception on %s %s: %s\n%s",
+            request.method,
+            request.url.path,
+            exc,
+            traceback.format_exc(),
+        )
         return JSONResponse(
             status_code=500,
             content={

@@ -3,12 +3,16 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import logging
 import threading
 import time
 from collections import defaultdict
 
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
+
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -97,16 +101,29 @@ class MetricsMiddleware(BaseHTTPMiddleware):
         self._registry.start_request()
         status_code = 500
         had_exception = False
+        logger.debug("Request started: %s %s", request.method, request.url.path)
 
         try:
             response = await call_next(request)
             status_code = response.status_code
         except Exception:
             had_exception = True
+            logger.exception(
+                "Request failed before response: %s %s",
+                request.method,
+                request.url.path,
+            )
             raise
         else:
             duration_ms = (time.perf_counter() - start) * 1000
             response.headers["X-Response-Time"] = f"{duration_ms:.3f}ms"
+            logger.debug(
+                "Request completed: %s %s status=%s duration_ms=%.3f",
+                request.method,
+                request.url.path,
+                status_code,
+                duration_ms,
+            )
             return response
         finally:
             duration_ms = (time.perf_counter() - start) * 1000

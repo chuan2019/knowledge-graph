@@ -70,6 +70,20 @@ class GraphStoreUnitTestCase(unittest.TestCase):
             query,
         )
 
+    def test_safe_query_logs_normalization_when_query_is_rewritten(self) -> None:
+        with self.assertLogs("app.services.graph_store", level="DEBUG") as captured:
+            self.store._ensure_safe_read_query(
+                """
+                MATCH (v:Version)
+                WHERE EXISTS((dr:DeliveryRequest)-[:FOR_VERSION]->(v))
+                RETURN v.version_id
+                """
+            )
+
+        self.assertTrue(
+            any("Normalized generated Cypher before execution" in message for message in captured.output)
+        )
+
     def test_run_read_query_uses_session_and_returns_rows(self) -> None:
         session = MagicMock()
         session.run.return_value = [

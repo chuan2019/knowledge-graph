@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
+import logging
 from pathlib import Path
 
 from fastapi import FastAPI
@@ -11,6 +12,7 @@ from app.api.v1 import metrics as metrics_router
 from app.api.v1 import qa as qa_router
 from app.core.config import Settings
 from app.core.errors import register_error_handlers
+from app.core.logging import configure_logging
 from app.core.middleware import MetricsMiddleware, MetricsRegistry
 from app.models.qa import HealthResponse
 from app.services.graph_store import GraphStore
@@ -18,12 +20,22 @@ from app.services.ollama_client import OllamaClient
 from app.services.qa_service import GraphQAService
 
 STATIC_DIR = Path(__file__).with_name("static")
+logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     settings = Settings.from_env()
+    configure_logging(settings.log_level)
+    logger.info(
+        "Starting Knowledge Graph QA Service with Neo4j=%s Ollama=%s model=%s log_level=%s",
+        settings.neo4j_uri,
+        settings.ollama_base_url,
+        settings.ollama_model,
+        settings.log_level.upper(),
+    )
     graph_store = GraphStore(settings)
+    logger.debug("Verifying Neo4j connectivity")
     graph_store.verify_connectivity()
     ollama_client = OllamaClient(settings)
     qa_service = GraphQAService(settings, graph_store, ollama_client)
@@ -32,12 +44,15 @@ async def lifespan(app: FastAPI):
     app.state.graph_store = graph_store
     app.state.ollama_client = ollama_client
     app.state.qa_service = qa_service
+    logger.info("Application services initialized successfully")
 
     try:
         yield
     finally:
+        logger.info("Shutting down Knowledge Graph QA Service")
         graph_store.close()
         await ollama_client.close()
+        logger.info("Application services shut down cleanly")
 
 
 app = FastAPI(
@@ -64,6 +79,7 @@ app.include_router(qa_router.legacy_router)
 @app.get("/health", response_model=HealthResponse)
 async def health() -> HealthResponse:
     settings = app.state.settings
+    logger.debug("Health check requested")
     return HealthResponse(
         status="ok",
         neo4j=settings.neo4j_uri,

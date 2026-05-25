@@ -6,6 +6,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class Settings:
+    log_level: str = "INFO"
     neo4j_uri: str = "bolt://localhost:7687"
     neo4j_user: str = "neo4j"
     neo4j_password: str = "testpass"
@@ -21,6 +22,7 @@ class Settings:
     @classmethod
     def from_env(cls) -> "Settings":
         return cls(
+            log_level=os.getenv("LOG_LEVEL", cls.log_level),
             neo4j_uri=os.getenv("NEO4J_URI", cls.neo4j_uri),
             neo4j_user=os.getenv("NEO4J_USER", cls.neo4j_user),
             neo4j_password=os.getenv("NEO4J_PASSWORD", cls.neo4j_password),

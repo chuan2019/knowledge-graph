@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from typing import Any
 
 from neo4j.exceptions import CypherSyntaxError, Neo4jError
@@ -77,6 +78,8 @@ If the retrieved records do not fully support an answer, say what is missing.
 Be concise, factual, and avoid inventing entities or counts.
 """.strip()
 
+logger = logging.getLogger(__name__)
+
 
 class GraphQAService:
     def __init__(
@@ -95,11 +98,18 @@ class GraphQAService:
         *,
         model: str | None = None,
     ) -> tuple[str, str, list[dict[str, Any]], list[str]]:
+        logger.debug(
+            "Answering question: model=%s question_length=%s max_retries=%s",
+            model or self._settings.ollama_model,
+            len(question),
+            self._settings.max_query_retries,
+        )
         agent_trace = ["Received user question."]
         last_error: str | None = None
         last_query: str | None = None
 
         for attempt in range(1, self._settings.max_query_retries + 2):
+            logger.debug("Planning Cypher attempt %s", attempt)
             cypher = await self._plan_cypher(
                 question=question,
                 model=model,
@@ -107,9 +117,15 @@ class GraphQAService:
                 previous_query=last_query,
             )
             agent_trace.append(f"Planned Cypher on attempt {attempt}.")
+            logger.debug("Planner produced Cypher on attempt %s: %s", attempt, cypher)
             try:
                 rows = self._graph_store.run_read_query(cypher)
                 agent_trace.append(f"Executed Cypher and retrieved {len(rows)} rows.")
+                logger.debug(
+                    "Cypher execution succeeded on attempt %s with %s rows",
+                    attempt,
+                    len(rows),
+                )
                 answer = await self._summarize_answer(
                     question=question,
                     cypher=cypher,
@@ -117,14 +133,21 @@ class GraphQAService:
                     model=model,
                 )
                 agent_trace.append("Synthesized natural-language answer.")
+                logger.debug("Answer synthesis completed on attempt %s", attempt)
                 return answer, cypher, rows, agent_trace
             except (ValueError, CypherSyntaxError, Neo4jError) as exc:
                 last_error = str(exc)
                 last_query = cypher
+                logger.warning(
+                    "Cypher execution failed on attempt %s: %s",
+                    attempt,
+                    last_error,
+                )
                 agent_trace.append(
                     f"Cypher execution failed on attempt {attempt}: {last_error}"
                 )
 
+        logger.error("Exhausted Cypher retries: %s", last_error)
         raise RuntimeError(f"Unable to answer question after retries: {last_error}")
 
     async def _plan_cypher(
@@ -150,6 +173,11 @@ class GraphQAService:
             f"{feedback}\n"
             "Return JSON only."
         )
+        logger.debug(
+            "Sending planner request to Ollama: model=%s feedback_present=%s",
+            model or self._settings.ollama_model,
+            bool(feedback),
+        )
         plan = await self._ollama_client.generate_json(
             system_prompt=PLANNER_SYSTEM_PROMPT,
             user_prompt=planner_prompt,
@@ -159,6 +187,7 @@ class GraphQAService:
         cypher = plan.get("cypher")
         if not isinstance(cypher, str) or not cypher.strip():
             raise ValueError(f"Planner did not return a usable Cypher query: {json.dumps(plan)}")
+        logger.debug("Planner response contained a usable Cypher query")
         return cypher.strip()
 
     async def _summarize_answer(
@@ -170,9 +199,14 @@ class GraphQAService:
         model: str | None,
     ) -> str:
         if not rows:
+            logger.debug("No rows returned for question; skipping answer synthesis")
             return "I could not find matching records in the graph for that question."
 
         limited_rows = rows[: self._settings.result_row_limit]
+        logger.debug(
+            "Sending answer synthesis request to Ollama with %s row(s)",
+            len(limited_rows),
+        )
         answer_prompt = (
             f"Question:\n{question}\n\n"
             f"Cypher used:\n{cypher}\n\n"
