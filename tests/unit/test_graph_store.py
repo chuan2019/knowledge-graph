@@ -49,6 +49,27 @@ class GraphStoreUnitTestCase(unittest.TestCase):
         )
         self.assertNotIn("EXISTS((dr:DeliveryRequest)-[:FOR_VERSION]->(v))", query)
 
+    def test_safe_query_rewrites_bare_pattern_lines_inside_exists_block(self) -> None:
+        query = self.store._ensure_safe_read_query(
+            """
+            MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
+            WHERE EXISTS {
+                MATCH (dr:DeliveryRequest)-[:TO_POINT]->(dp)
+                (dp:DeliveryPoint)-[:LOCATED_IN]->(r)
+            }
+            RETURN t.title_name
+            """
+        )
+
+        self.assertIn(
+            "MATCH (dp:DeliveryPoint)-[:LOCATED_IN]->(r)",
+            query,
+        )
+        self.assertNotIn(
+            "\n                (dp:DeliveryPoint)-[:LOCATED_IN]->(r)",
+            query,
+        )
+
     def test_run_read_query_uses_session_and_returns_rows(self) -> None:
         session = MagicMock()
         session.run.return_value = [
