@@ -21,6 +21,17 @@ class AppError(Exception):
         super().__init__(message)
 
 
+class ServiceUnavailableError(AppError):
+    """Raised when an upstream dependency is unavailable or misconfigured."""
+
+    def __init__(self, service: str, detail: str = ""):
+        super().__init__(
+            message=f"{service} is currently unavailable",
+            status_code=503,
+            detail=detail,
+        )
+
+
 def register_error_handlers(app: FastAPI) -> None:
     """Register global exception handlers on the FastAPI app."""
 
