@@ -34,6 +34,21 @@ class GraphStoreUnitTestCase(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "RETURN clause"):
             self.store._ensure_safe_read_query("MATCH (n)")
 
+    def test_safe_query_rewrites_legacy_exists_pattern(self) -> None:
+        query = self.store._ensure_safe_read_query(
+            """
+            MATCH (v:Version)
+            WHERE EXISTS((dr:DeliveryRequest)-[:FOR_VERSION]->(v))
+            RETURN v.version_id
+            """
+        )
+
+        self.assertIn(
+            "EXISTS { MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v) }",
+            query,
+        )
+        self.assertNotIn("EXISTS((dr:DeliveryRequest)-[:FOR_VERSION]->(v))", query)
+
     def test_run_read_query_uses_session_and_returns_rows(self) -> None:
         session = MagicMock()
         session.run.return_value = [
