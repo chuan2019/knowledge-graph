@@ -5,7 +5,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 from neo4j.exceptions import CypherSyntaxError
 
-from app.config import Settings
+from app.core.config import Settings
 from app.services.qa_service import GraphQAService
 
 

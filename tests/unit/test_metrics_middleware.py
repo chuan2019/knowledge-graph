@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import unittest
 
-from app.middleware import MetricsRegistry
+from app.core.middleware import MetricsRegistry
 
 
 class MetricsRegistryUnitTestCase(unittest.TestCase):

@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from unittest.mock import MagicMock, patch
 
-from app.config import Settings
+from app.core.config import Settings
 from app.services.graph_store import GraphStore
 
 

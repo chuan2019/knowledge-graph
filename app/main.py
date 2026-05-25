@@ -9,9 +9,9 @@ from fastapi.staticfiles import StaticFiles
 from app.api import ui as ui_router
 from app.api.v1 import metrics as metrics_router
 from app.api.v1 import qa as qa_router
-from app.config import Settings
-from app.errors import register_error_handlers
-from app.middleware import MetricsMiddleware, MetricsRegistry
+from app.core.config import Settings
+from app.core.errors import register_error_handlers
+from app.core.middleware import MetricsMiddleware, MetricsRegistry
 from app.models.qa import HealthResponse
 from app.services.graph_store import GraphStore
 from app.services.ollama_client import OllamaClient
