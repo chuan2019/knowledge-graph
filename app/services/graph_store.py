@@ -58,6 +58,7 @@ class GraphStore:
             raise ValueError("Generated Cypher query is empty.")
 
         normalized_query = self._rewrite_legacy_exists_patterns(normalized_query)
+        normalized_query = self._rewrite_bare_pattern_lines(normalized_query)
 
         upper_query = normalized_query.upper()
         for pattern in FORBIDDEN_CYPHER_PATTERNS:
@@ -82,3 +83,29 @@ class GraphStore:
             return f"EXISTS {{ MATCH {pattern} }}"
 
         return LEGACY_EXISTS_PATTERN.sub(replacer, query)
+
+    def _rewrite_bare_pattern_lines(self, query: str) -> str:
+        normalized_lines: list[str] = []
+        previous_significant_line = ""
+
+        for line in query.splitlines():
+            stripped_line = line.strip()
+
+            if stripped_line.startswith("(") and not self._is_pattern_continuation(
+                previous_significant_line
+            ):
+                indent = line[: len(line) - len(line.lstrip())]
+                line = f"{indent}MATCH {stripped_line}"
+                stripped_line = line.strip()
+
+            normalized_lines.append(line)
+
+            if stripped_line:
+                previous_significant_line = stripped_line
+
+        return "\n".join(normalized_lines)
+
+    @staticmethod
+    def _is_pattern_continuation(previous_significant_line: str) -> bool:
+        previous = previous_significant_line.rstrip()
+        return previous.endswith(("->", "<-", "-", ",", "("))
