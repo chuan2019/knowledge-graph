@@ -6,6 +6,7 @@ from typing import Any
 import httpx
 
 from app.config import Settings
+from app.errors import ServiceUnavailableError
 
 
 class OllamaClient:
@@ -75,9 +76,41 @@ class OllamaClient:
             payload["format"] = format_name
 
         response = await self._client.post("/api/generate", json=payload)
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as exc:
+            detail = self._extract_error_detail(response)
+            requested_model = str(payload["model"])
+            if response.status_code == 404 and requested_model in detail:
+                raise ServiceUnavailableError(
+                    "Ollama",
+                    detail=(
+                        f"Model '{requested_model}' is not available in Ollama. "
+                        f"Pull it first with: ollama pull {requested_model}"
+                    ),
+                ) from exc
+
+            raise ServiceUnavailableError(
+                "Ollama",
+                detail=detail or f"HTTP {response.status_code} returned from Ollama",
+            ) from exc
+
         data = response.json()
         content = data.get("response")
         if not isinstance(content, str) or not content.strip():
             raise ValueError("Ollama returned an empty response.")
         return content.strip()
+
+    @staticmethod
+    def _extract_error_detail(response: httpx.Response) -> str:
+        try:
+            payload = response.json()
+        except ValueError:
+            return response.text.strip()
+
+        if isinstance(payload, dict):
+            error = payload.get("error")
+            if isinstance(error, str):
+                return error
+
+        return response.text.strip()

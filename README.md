@@ -174,6 +174,12 @@ cd /home/chuan/Projects/knowledge-graph
 docker compose up -d neo4j ollama
 ```
 
+If you need the default model locally outside Compose, pull it with:
+
+```bash
+ollama pull llama3.2
+```
+
 To run the API in Docker as well:
 
 ```bash
@@ -185,6 +191,8 @@ In Docker Compose, the API container connects to Neo4j and Ollama over the inter
 
 - `NEO4J_URI=bolt://neo4j:7687`
 - `OLLAMA_BASE_URL=http://ollama:11434`
+
+Compose also starts a one-shot `ollama-pull` service that ensures the configured model is available before the API starts. By default it pulls `llama3.2`, and you can override that with `OLLAMA_MODEL`.
 
 ### Start the API
 
