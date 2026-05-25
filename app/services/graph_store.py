@@ -20,6 +20,11 @@ FORBIDDEN_CYPHER_PATTERNS = [
     r"\bCALL\s+apoc\.periodic\b",
 ]
 
+LEGACY_EXISTS_PATTERN = re.compile(
+    r"EXISTS\s*\(\s*(?P<pattern>\([^()]*\)(?:\s*(?:<?-\[[^\]]*\]-?>|<?--?>)\s*\([^()]*\))+?)\s*\)",
+    flags=re.IGNORECASE | re.DOTALL,
+)
+
 
 class GraphStore:
     def __init__(self, settings: Settings) -> None:
@@ -52,6 +57,8 @@ class GraphStore:
         if not normalized_query:
             raise ValueError("Generated Cypher query is empty.")
 
+        normalized_query = self._rewrite_legacy_exists_patterns(normalized_query)
+
         upper_query = normalized_query.upper()
         for pattern in FORBIDDEN_CYPHER_PATTERNS:
             if re.search(pattern, upper_query):
@@ -68,3 +75,10 @@ class GraphStore:
             )
 
         return normalized_query
+
+    def _rewrite_legacy_exists_patterns(self, query: str) -> str:
+        def replacer(match: re.Match[str]) -> str:
+            pattern = match.group("pattern").strip()
+            return f"EXISTS {{ MATCH {pattern} }}"
+
+        return LEGACY_EXISTS_PATTERN.sub(replacer, query)

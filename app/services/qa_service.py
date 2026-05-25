@@ -67,6 +67,7 @@ Rules:
 - Never use CREATE, MERGE, DELETE, DETACH, SET, REMOVE, DROP, LOAD CSV, or admin procedures.
 - Always include a RETURN clause.
 - Prefer explicit MATCH patterns.
+- For existence checks, use `EXISTS { MATCH ... }`, not `EXISTS((...))` pattern expressions.
 - Keep results concise and useful for answer synthesis.
 """.strip()
 
