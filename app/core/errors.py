@@ -32,6 +32,17 @@ class ServiceUnavailableError(AppError):
         )
 
 
+class TooManyRequestsError(AppError):
+    """Raised when the application is saturated and cannot accept more work."""
+
+    def __init__(self, detail: str = ""):
+        super().__init__(
+            message="Request capacity is saturated",
+            status_code=429,
+            detail=detail,
+        )
+
+
 def register_error_handlers(app: FastAPI) -> None:
     """Register global exception handlers on the FastAPI app."""
 

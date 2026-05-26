@@ -5,6 +5,7 @@ from __future__ import annotations
 from typing import Any, cast
 
 from fastapi import APIRouter, Request
+from fastapi.responses import Response
 
 from app.core.middleware import MetricsRegistry
 from app.models.metrics import MetricsResponse
@@ -24,6 +25,24 @@ async def get_metrics(request: Request) -> MetricsResponse:
     return _get_metrics_response(request)
 
 
+@router.get("/metrics/prometheus", include_in_schema=False)
+async def get_prometheus_metrics(request: Request) -> Response:
+    registry: MetricsRegistry = request.app.state.metrics_registry
+    return Response(
+        content=registry.render_prometheus(),
+        media_type=registry.prometheus_content_type,
+    )
+
+
 @legacy_router.get("/metrics")
 async def get_legacy_metrics(request: Request) -> MetricsResponse:
     return _get_metrics_response(request)
+
+
+@legacy_router.get("/metrics/prometheus", include_in_schema=False)
+async def get_legacy_prometheus_metrics(request: Request) -> Response:
+    registry: MetricsRegistry = request.app.state.metrics_registry
+    return Response(
+        content=registry.render_prometheus(),
+        media_type=registry.prometheus_content_type,
+    )

@@ -12,7 +12,7 @@ class AppRoutesIntegrationTestCase(unittest.TestCase):
     def setUp(self) -> None:
         self.verify_connectivity = patch(
             "app.services.graph_store.GraphStore.verify_connectivity",
-            return_value=None,
+            new=AsyncMock(return_value=None),
         )
         self.verify_connectivity.start()
 
@@ -35,6 +35,14 @@ class AppRoutesIntegrationTestCase(unittest.TestCase):
         self.assertIn("neo4j", response.json())
         self.assertIn("ollama_base_url", response.json())
 
+    def test_health_includes_trace_header_when_available(self) -> None:
+        with patch("app.core.middleware.current_trace_id", return_value="trace-123"):
+            with TestClient(app) as client:
+                response = client.get("/health")
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers.get("X-Trace-Id"), "trace-123")
+
     def test_schema_routes_return_graph_schema(self) -> None:
         with TestClient(app) as client:
             legacy_response = client.get("/schema")
@@ -50,11 +58,14 @@ class AppRoutesIntegrationTestCase(unittest.TestCase):
             client.get("/health")
             legacy_response = client.get("/metrics")
             versioned_response = client.get("/api/v1/metrics")
+            prometheus_response = client.get("/api/v1/metrics/prometheus")
 
         self.assertEqual(legacy_response.status_code, 200)
         self.assertEqual(versioned_response.status_code, 200)
+        self.assertEqual(prometheus_response.status_code, 200)
         self.assertIn("total_requests", legacy_response.json())
         self.assertIn("paths", legacy_response.json())
+        self.assertIn("kg_http_requests_started_total", prometheus_response.text)
         self.assertGreaterEqual(
             versioned_response.json()["total_requests"],
             legacy_response.json()["total_requests"],

@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 
 async def _ask_question(payload: AskRequest, request: Request) -> AskResponse:
-    logger.debug(
+    logger.info(
         "Received ask request: path=%s model=%s include_rows=%s question_length=%s",
         request.url.path,
         payload.model or "default",
@@ -27,7 +27,7 @@ async def _ask_question(payload: AskRequest, request: Request) -> AskResponse:
         payload.question,
         model=payload.model,
     )
-    logger.debug(
+    logger.info(
         "Ask request completed: path=%s row_count=%s cypher_length=%s",
         request.url.path,
         len(rows),

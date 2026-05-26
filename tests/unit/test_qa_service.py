@@ -6,6 +6,7 @@ from unittest.mock import AsyncMock, MagicMock
 from neo4j.exceptions import CypherSyntaxError
 
 from app.core.config import Settings
+from app.core.errors import TooManyRequestsError
 from app.services.qa_service import GraphQAService
 
 
@@ -20,7 +21,7 @@ class GraphQAServiceUnitTestCase(unittest.IsolatedAsyncioTestCase):
         self.ollama_client.generate_json = AsyncMock(
             return_value={"cypher": "MATCH (n) RETURN n LIMIT 1", "rationale": "stub"}
         )
-        self.graph_store.run_read_query.return_value = [{"name": "alpha"}]
+        self.graph_store.run_read_query = AsyncMock(return_value=[{"name": "alpha"}])
         self.ollama_client.generate_text = AsyncMock(return_value="Grounded answer")
 
         answer, cypher, rows, trace = await self.service.answer_question("test question")
@@ -38,10 +39,10 @@ class GraphQAServiceUnitTestCase(unittest.IsolatedAsyncioTestCase):
                 {"cypher": "MATCH (n) RETURN n LIMIT 1", "rationale": "fixed"},
             ]
         )
-        self.graph_store.run_read_query.side_effect = [
+        self.graph_store.run_read_query = AsyncMock(side_effect=[
             CypherSyntaxError("bad query"),
             [{"name": "alpha"}],
-        ]
+        ])
         self.ollama_client.generate_text = AsyncMock(return_value="Recovered answer")
 
         answer, cypher, rows, trace = await self.service.answer_question("test question")
@@ -59,10 +60,10 @@ class GraphQAServiceUnitTestCase(unittest.IsolatedAsyncioTestCase):
                 {"cypher": "MATCH (n) RETURN n LIMIT 1", "rationale": "fixed"},
             ]
         )
-        self.graph_store.run_read_query.side_effect = [
+        self.graph_store.run_read_query = AsyncMock(side_effect=[
             ValueError("bad query"),
             [{"name": "alpha"}],
-        ]
+        ])
         self.ollama_client.generate_text = AsyncMock(return_value="Recovered answer")
 
         with self.assertLogs("app.services.qa_service", level="DEBUG") as captured:
@@ -76,10 +77,24 @@ class GraphQAServiceUnitTestCase(unittest.IsolatedAsyncioTestCase):
         self.ollama_client.generate_json = AsyncMock(
             return_value={"cypher": "MATCH (n RETURN n", "rationale": "broken"}
         )
-        self.graph_store.run_read_query.side_effect = ValueError("still bad")
+        self.graph_store.run_read_query = AsyncMock(side_effect=ValueError("still bad"))
 
         with self.assertRaisesRegex(RuntimeError, "Unable to answer question"):
             await self.service.answer_question("test question")
+
+    async def test_answer_question_rejects_when_capacity_is_saturated(self) -> None:
+        saturated_settings = Settings(
+            qa_max_concurrency=1,
+            qa_queue_timeout_ms=1,
+        )
+        service = GraphQAService(saturated_settings, self.graph_store, self.ollama_client)
+        await service._request_semaphore.acquire()
+
+        try:
+            with self.assertRaises(TooManyRequestsError):
+                await service.answer_question("test question")
+        finally:
+            service._request_semaphore.release()
 
     async def test_summarize_answer_short_circuits_when_no_rows(self) -> None:
         response = await self.service._summarize_answer(
