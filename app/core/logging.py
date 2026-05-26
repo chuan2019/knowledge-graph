@@ -2,8 +2,27 @@ from __future__ import annotations
 
 import logging
 
+from app.core.tracing import current_span_id, current_trace_id
 
-DEFAULT_LOG_FORMAT = "%(asctime)s %(levelname)s [%(name)s] %(message)s"
+
+DEFAULT_LOG_FORMAT = (
+    "%(asctime)s %(levelname)s [%(name)s] "
+    "trace_id=%(trace_id)s span_id=%(span_id)s %(message)s"
+)
+
+
+class TraceContextFilter(logging.Filter):
+    def filter(self, record: logging.LogRecord) -> bool:
+        record.trace_id = current_trace_id() or "-"
+        record.span_id = current_span_id() or "-"
+        return True
+
+
+def _configure_handler(handler: logging.Handler, level: int) -> None:
+    handler.setLevel(level)
+    handler.setFormatter(logging.Formatter(DEFAULT_LOG_FORMAT))
+    if not any(isinstance(existing_filter, TraceContextFilter) for existing_filter in handler.filters):
+        handler.addFilter(TraceContextFilter())
 
 
 def configure_logging(level_name: str) -> None:
@@ -12,8 +31,7 @@ def configure_logging(level_name: str) -> None:
 
     if not root_logger.handlers:
         logging.basicConfig(level=level, format=DEFAULT_LOG_FORMAT)
-        return
-
+    
     root_logger.setLevel(level)
     for handler in root_logger.handlers:
-        handler.setLevel(level)
+        _configure_handler(handler, level)

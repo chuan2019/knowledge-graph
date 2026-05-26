@@ -1,12 +1,17 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
+from contextlib import asynccontextmanager
 from typing import Any
 
 from neo4j.exceptions import CypherSyntaxError, Neo4jError
+from opentelemetry import trace
 
 from app.core.config import Settings
+from app.core.errors import TooManyRequestsError
+from app.core.middleware import MetricsRegistry
 from app.services.graph_store import GraphStore
 from app.services.ollama_client import OllamaClient
 
@@ -79,6 +84,7 @@ Be concise, factual, and avoid inventing entities or counts.
 """.strip()
 
 logger = logging.getLogger(__name__)
+tracer = trace.get_tracer(__name__)
 
 
 class GraphQAService:
@@ -87,10 +93,13 @@ class GraphQAService:
         settings: Settings,
         graph_store: GraphStore,
         ollama_client: OllamaClient,
+        metrics_registry: MetricsRegistry | None = None,
     ) -> None:
         self._settings = settings
         self._graph_store = graph_store
         self._ollama_client = ollama_client
+        self._metrics_registry = metrics_registry
+        self._request_semaphore = asyncio.Semaphore(settings.qa_max_concurrency)
 
     async def answer_question(
         self,
@@ -98,57 +107,100 @@ class GraphQAService:
         *,
         model: str | None = None,
     ) -> tuple[str, str, list[dict[str, Any]], list[str]]:
-        logger.debug(
-            "Answering question: model=%s question_length=%s max_retries=%s",
-            model or self._settings.ollama_model,
-            len(question),
-            self._settings.max_query_retries,
-        )
-        agent_trace = ["Received user question."]
-        last_error: str | None = None
-        last_query: str | None = None
-
-        for attempt in range(1, self._settings.max_query_retries + 2):
-            logger.debug("Planning Cypher attempt %s", attempt)
-            cypher = await self._plan_cypher(
-                question=question,
-                model=model,
-                error_feedback=last_error,
-                previous_query=last_query,
+        with tracer.start_as_current_span("qa.answer_question") as span:
+            span.set_attribute("qa.model", model or self._settings.ollama_model)
+            span.set_attribute("qa.question_length", len(question))
+            span.set_attribute("qa.max_retries", self._settings.max_query_retries)
+            logger.debug(
+                "Answering question: model=%s question_length=%s max_retries=%s",
+                model or self._settings.ollama_model,
+                len(question),
+                self._settings.max_query_retries,
             )
-            agent_trace.append(f"Planned Cypher on attempt {attempt}.")
-            logger.debug("Planner produced Cypher on attempt %s: %s", attempt, cypher)
-            try:
-                rows = self._graph_store.run_read_query(cypher)
-                agent_trace.append(f"Executed Cypher and retrieved {len(rows)} rows.")
-                logger.debug(
-                    "Cypher execution succeeded on attempt %s with %s rows",
-                    attempt,
-                    len(rows),
-                )
-                answer = await self._summarize_answer(
-                    question=question,
-                    cypher=cypher,
-                    rows=rows,
-                    model=model,
-                )
-                agent_trace.append("Synthesized natural-language answer.")
-                logger.debug("Answer synthesis completed on attempt %s", attempt)
-                return answer, cypher, rows, agent_trace
-            except (ValueError, CypherSyntaxError, Neo4jError) as exc:
-                last_error = str(exc)
-                last_query = cypher
-                logger.warning(
-                    "Cypher execution failed on attempt %s: %s",
-                    attempt,
-                    last_error,
-                )
-                agent_trace.append(
-                    f"Cypher execution failed on attempt {attempt}: {last_error}"
-                )
+            async with self._acquire_request_slot(question=question):
+                agent_trace = ["Received user question."]
+                last_error: str | None = None
+                last_query: str | None = None
 
-        logger.error("Exhausted Cypher retries: %s", last_error)
-        raise RuntimeError(f"Unable to answer question after retries: {last_error}")
+                for attempt in range(1, self._settings.max_query_retries + 2):
+                    span.set_attribute("qa.attempt", attempt)
+                    logger.debug("Planning Cypher attempt %s", attempt)
+                    cypher = await self._plan_cypher(
+                        question=question,
+                        model=model,
+                        error_feedback=last_error,
+                        previous_query=last_query,
+                    )
+                    agent_trace.append(f"Planned Cypher on attempt {attempt}.")
+                    logger.debug("Planner produced Cypher on attempt %s: %s", attempt, cypher)
+                    try:
+                        rows = await self._graph_store.run_read_query(cypher)
+                        agent_trace.append(f"Executed Cypher and retrieved {len(rows)} rows.")
+                        span.set_attribute("qa.row_count", len(rows))
+                        logger.debug(
+                            "Cypher execution succeeded on attempt %s with %s rows",
+                            attempt,
+                            len(rows),
+                        )
+                        answer = await self._summarize_answer(
+                            question=question,
+                            cypher=cypher,
+                            rows=rows,
+                            model=model,
+                        )
+                        agent_trace.append("Synthesized natural-language answer.")
+                        logger.debug("Answer synthesis completed on attempt %s", attempt)
+                        if self._metrics_registry is not None:
+                            self._metrics_registry.record_qa_request(outcome="success")
+                        return answer, cypher, rows, agent_trace
+                    except (ValueError, CypherSyntaxError, Neo4jError) as exc:
+                        last_error = str(exc)
+                        last_query = cypher
+                        span.set_attribute("qa.last_error", last_error)
+                        logger.warning(
+                            "Cypher execution failed on attempt %s: %s",
+                            attempt,
+                            last_error,
+                        )
+                        agent_trace.append(
+                            f"Cypher execution failed on attempt {attempt}: {last_error}"
+                        )
+
+                logger.error("Exhausted Cypher retries: %s", last_error)
+                if self._metrics_registry is not None:
+                    self._metrics_registry.record_qa_request(outcome="error")
+                raise RuntimeError(f"Unable to answer question after retries: {last_error}")
+
+    @asynccontextmanager
+    async def _acquire_request_slot(self, *, question: str):
+        queue_timeout_seconds = self._settings.qa_queue_timeout_ms / 1000
+        try:
+            await asyncio.wait_for(
+                self._request_semaphore.acquire(),
+                timeout=queue_timeout_seconds,
+            )
+        except TimeoutError as exc:
+            logger.warning(
+                "Rejected question due to saturated request capacity: question_length=%s max_concurrency=%s queue_timeout_ms=%s",
+                len(question),
+                self._settings.qa_max_concurrency,
+                self._settings.qa_queue_timeout_ms,
+            )
+            if self._metrics_registry is not None:
+                self._metrics_registry.record_qa_request(outcome="rejected")
+            raise TooManyRequestsError(
+                detail=(
+                    "The QA service is saturated under current load. "
+                    "Retry shortly or scale the API and model-serving tiers."
+                )
+            ) from exc
+
+        try:
+            logger.debug("Acquired QA request slot")
+            yield
+        finally:
+            self._request_semaphore.release()
+            logger.debug("Released QA request slot")
 
     async def _plan_cypher(
         self,
@@ -158,37 +210,41 @@ class GraphQAService:
         error_feedback: str | None,
         previous_query: str | None,
     ) -> str:
-        feedback = ""
-        if error_feedback and previous_query:
-            feedback = (
-                "\nPrevious query failed. Repair it instead of starting over.\n"
-                f"Previous query:\n{previous_query}\n"
-                f"Neo4j error:\n{error_feedback}\n"
-            )
+        with tracer.start_as_current_span("qa.plan_cypher") as span:
+            feedback = ""
+            if error_feedback and previous_query:
+                feedback = (
+                    "\nPrevious query failed. Repair it instead of starting over.\n"
+                    f"Previous query:\n{previous_query}\n"
+                    f"Neo4j error:\n{error_feedback}\n"
+                )
 
-        planner_prompt = (
-            f"Schema:\n{GRAPH_SCHEMA}\n\n"
-            f"Examples:\n{EXAMPLE_QUERIES}\n\n"
-            f"Question:\n{question}\n"
-            f"{feedback}\n"
-            "Return JSON only."
-        )
-        logger.debug(
-            "Sending planner request to Ollama: model=%s feedback_present=%s",
-            model or self._settings.ollama_model,
-            bool(feedback),
-        )
-        plan = await self._ollama_client.generate_json(
-            system_prompt=PLANNER_SYSTEM_PROMPT,
-            user_prompt=planner_prompt,
-            model=model,
-            temperature=self._settings.planner_temperature,
-        )
-        cypher = plan.get("cypher")
-        if not isinstance(cypher, str) or not cypher.strip():
-            raise ValueError(f"Planner did not return a usable Cypher query: {json.dumps(plan)}")
-        logger.debug("Planner response contained a usable Cypher query")
-        return cypher.strip()
+            planner_prompt = (
+                f"Schema:\n{GRAPH_SCHEMA}\n\n"
+                f"Examples:\n{EXAMPLE_QUERIES}\n\n"
+                f"Question:\n{question}\n"
+                f"{feedback}\n"
+                "Return JSON only."
+            )
+            span.set_attribute("qa.model", model or self._settings.ollama_model)
+            span.set_attribute("qa.feedback_present", bool(feedback))
+            logger.debug(
+                "Sending planner request to Ollama: model=%s feedback_present=%s",
+                model or self._settings.ollama_model,
+                bool(feedback),
+            )
+            plan = await self._ollama_client.generate_json(
+                system_prompt=PLANNER_SYSTEM_PROMPT,
+                user_prompt=planner_prompt,
+                model=model,
+                temperature=self._settings.planner_temperature,
+            )
+            cypher = plan.get("cypher")
+            if not isinstance(cypher, str) or not cypher.strip():
+                raise ValueError(f"Planner did not return a usable Cypher query: {json.dumps(plan)}")
+            span.set_attribute("qa.cypher_length", len(cypher.strip()))
+            logger.debug("Planner response contained a usable Cypher query")
+            return cypher.strip()
 
     async def _summarize_answer(
         self,
@@ -198,24 +254,27 @@ class GraphQAService:
         rows: list[dict[str, Any]],
         model: str | None,
     ) -> str:
-        if not rows:
-            logger.debug("No rows returned for question; skipping answer synthesis")
-            return "I could not find matching records in the graph for that question."
+        with tracer.start_as_current_span("qa.summarize_answer") as span:
+            if not rows:
+                logger.debug("No rows returned for question; skipping answer synthesis")
+                span.set_attribute("qa.row_count", 0)
+                return "I could not find matching records in the graph for that question."
 
-        limited_rows = rows[: self._settings.result_row_limit]
-        logger.debug(
-            "Sending answer synthesis request to Ollama with %s row(s)",
-            len(limited_rows),
-        )
-        answer_prompt = (
-            f"Question:\n{question}\n\n"
-            f"Cypher used:\n{cypher}\n\n"
-            f"Retrieved rows (JSON):\n{json.dumps(limited_rows, default=str, indent=2)}\n\n"
-            "Answer the question in natural language. Mention important filters or uncertainty when relevant."
-        )
-        return await self._ollama_client.generate_text(
-            system_prompt=ANSWER_SYSTEM_PROMPT,
-            user_prompt=answer_prompt,
-            model=model,
-            temperature=self._settings.answer_temperature,
-        )
+            limited_rows = rows[: self._settings.result_row_limit]
+            span.set_attribute("qa.row_count", len(limited_rows))
+            logger.debug(
+                "Sending answer synthesis request to Ollama with %s row(s)",
+                len(limited_rows),
+            )
+            answer_prompt = (
+                f"Question:\n{question}\n\n"
+                f"Cypher used:\n{cypher}\n\n"
+                f"Retrieved rows (JSON):\n{json.dumps(limited_rows, default=str, indent=2)}\n\n"
+                "Answer the question in natural language. Mention important filters or uncertainty when relevant."
+            )
+            return await self._ollama_client.generate_text(
+                system_prompt=ANSWER_SYSTEM_PROMPT,
+                user_prompt=answer_prompt,
+                model=model,
+                temperature=self._settings.answer_temperature,
+            )

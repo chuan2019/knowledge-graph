@@ -5,9 +5,11 @@ import re
 import time
 from typing import Any, LiteralString, cast
 
-from neo4j import GraphDatabase, Query
+from neo4j import AsyncGraphDatabase, Query
+from opentelemetry import trace
 
 from app.core.config import Settings
+from app.core.middleware import MetricsRegistry
 
 FORBIDDEN_CYPHER_PATTERNS = [
     r"\bCREATE\b",
@@ -27,43 +29,68 @@ LEGACY_EXISTS_PATTERN = re.compile(
     flags=re.IGNORECASE | re.DOTALL,
 )
 logger = logging.getLogger(__name__)
+tracer = trace.get_tracer(__name__)
 
 
 class GraphStore:
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, metrics_registry: MetricsRegistry | None = None) -> None:
         self._settings = settings
-        self._driver = GraphDatabase.driver(
+        self._metrics_registry = metrics_registry
+        self._driver = AsyncGraphDatabase.driver(
             settings.neo4j_uri,
             auth=(settings.neo4j_user, settings.neo4j_password),
+            max_connection_pool_size=settings.neo4j_max_connection_pool_size,
         )
 
-    def verify_connectivity(self) -> None:
+    async def verify_connectivity(self) -> None:
         logger.debug("Verifying Neo4j driver connectivity to %s", self._settings.neo4j_uri)
-        self._driver.verify_connectivity()
+        await self._driver.verify_connectivity()
         logger.info("Neo4j connectivity verified for database=%s", self._settings.neo4j_database)
 
-    def close(self) -> None:
+    async def close(self) -> None:
         logger.debug("Closing Neo4j driver")
-        self._driver.close()
+        await self._driver.close()
 
-    def run_read_query(self, query: str) -> list[dict[str, Any]]:
-        safe_query = self._ensure_safe_read_query(query)
-        logger.debug("Executing read query against Neo4j: %s", safe_query)
-        start = time.perf_counter()
-        with self._driver.session(database=self._settings.neo4j_database) as session:
-            result = session.run(
-                Query(
-                    cast(LiteralString, safe_query),
-                    timeout=self._settings.cypher_timeout_ms / 1000,
+    async def run_read_query(self, query: str) -> list[dict[str, Any]]:
+        with tracer.start_as_current_span("neo4j.run_read_query") as span:
+            safe_query = self._ensure_safe_read_query(query)
+            span.set_attribute("db.system", "neo4j")
+            span.set_attribute("db.operation", "read")
+            span.set_attribute("db.query_length", len(safe_query))
+            logger.debug("Executing read query against Neo4j: %s", safe_query)
+            start = time.perf_counter()
+            try:
+                async with self._driver.session(database=self._settings.neo4j_database) as session:
+                    result = await session.run(
+                        Query(
+                            cast(LiteralString, safe_query),
+                            timeout=self._settings.cypher_timeout_ms / 1000,
+                        )
+                    )
+                    rows = await result.data()
+            except Exception:
+                duration_ms = (time.perf_counter() - start) * 1000
+                if self._metrics_registry is not None:
+                    self._metrics_registry.record_neo4j_query(
+                        outcome="error",
+                        duration_ms=duration_ms,
+                    )
+                raise
+
+            duration_ms = (time.perf_counter() - start) * 1000
+            if self._metrics_registry is not None:
+                self._metrics_registry.record_neo4j_query(
+                    outcome="success",
+                    duration_ms=duration_ms,
+                    row_count=len(rows),
                 )
+            span.set_attribute("db.row_count", len(rows))
+            logger.debug(
+                "Neo4j query completed: rows=%s duration_ms=%.3f",
+                len(rows),
+                duration_ms,
             )
-            rows = [dict(record.items()) for record in result]
-        logger.debug(
-            "Neo4j query completed: rows=%s duration_ms=%.3f",
-            len(rows),
-            (time.perf_counter() - start) * 1000,
-        )
-        return rows
+            return rows
 
     def _ensure_safe_read_query(self, query: str) -> str:
         normalized_query = query.strip().rstrip(";")

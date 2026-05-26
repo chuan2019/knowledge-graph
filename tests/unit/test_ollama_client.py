@@ -58,6 +58,21 @@ class OllamaClientUnitTestCase(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(content, "hello world")
 
+    async def test_generate_text_surfaces_timeout_as_service_unavailable(self) -> None:
+        async def fake_post(*_args, **_kwargs):
+            raise httpx.TimeoutException("timed out")
+
+        self.client._client.post = fake_post  # type: ignore[method-assign]
+
+        with self.assertRaises(ServiceUnavailableError) as context:
+            await self.client.generate_text(
+                system_prompt="system",
+                user_prompt="prompt",
+            )
+
+        self.assertEqual(context.exception.status_code, 503)
+        self.assertIn("timed out", context.exception.detail.lower())
+
 
 if __name__ == "__main__":
     unittest.main()

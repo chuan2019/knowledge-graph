@@ -14,6 +14,7 @@ from app.core.config import Settings
 from app.core.errors import register_error_handlers
 from app.core.logging import configure_logging
 from app.core.middleware import MetricsMiddleware, MetricsRegistry
+from app.core.tracing import setup_tracing, shutdown_tracing
 from app.models.qa import HealthResponse
 from app.services.graph_store import GraphStore
 from app.services.ollama_client import OllamaClient
@@ -27,30 +28,40 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     settings = Settings.from_env()
     configure_logging(settings.log_level)
+    tracing_manager = setup_tracing(app, settings)
     logger.info(
-        "Starting Knowledge Graph QA Service with Neo4j=%s Ollama=%s model=%s log_level=%s",
+        "Starting Knowledge Graph QA Service with Neo4j=%s Ollama=%s model=%s log_level=%s tracing_enabled=%s",
         settings.neo4j_uri,
         settings.ollama_base_url,
         settings.ollama_model,
         settings.log_level.upper(),
+        settings.tracing_enabled,
     )
-    graph_store = GraphStore(settings)
+    metrics_registry = app.state.metrics_registry
+    graph_store = GraphStore(settings, metrics_registry=metrics_registry)
     logger.debug("Verifying Neo4j connectivity")
-    graph_store.verify_connectivity()
-    ollama_client = OllamaClient(settings)
-    qa_service = GraphQAService(settings, graph_store, ollama_client)
+    await graph_store.verify_connectivity()
+    ollama_client = OllamaClient(settings, metrics_registry=metrics_registry)
+    qa_service = GraphQAService(
+        settings,
+        graph_store,
+        ollama_client,
+        metrics_registry=metrics_registry,
+    )
 
     app.state.settings = settings
     app.state.graph_store = graph_store
     app.state.ollama_client = ollama_client
     app.state.qa_service = qa_service
+    app.state.tracing_manager = tracing_manager
     logger.info("Application services initialized successfully")
 
     try:
         yield
     finally:
         logger.info("Shutting down Knowledge Graph QA Service")
-        graph_store.close()
+        shutdown_tracing(app, tracing_manager)
+        await graph_store.close()
         await ollama_client.close()
         logger.info("Application services shut down cleanly")
 

@@ -222,7 +222,17 @@ The service uses these defaults:
 
 Optional tuning:
 
+- `LOG_LEVEL=INFO`
+- `TRACING_ENABLED=false`
+- `TRACING_SERVICE_NAME=knowledge-graph-api`
+- `OTEL_TRACES_EXPORTER_ENDPOINT=http://localhost:4318/v1/traces`
+- `QA_MAX_CONCURRENCY=64`
+- `QA_QUEUE_TIMEOUT_MS=250`
 - `MAX_QUERY_RETRIES=2`
+- `NEO4J_MAX_CONNECTION_POOL_SIZE=100`
+- `OLLAMA_TIMEOUT_SECONDS=60`
+- `OLLAMA_MAX_CONNECTIONS=200`
+- `OLLAMA_MAX_KEEPALIVE_CONNECTIONS=50`
 - `RESULT_ROW_LIMIT=25`
 - `CYPHER_TIMEOUT_MS=15000`
 
@@ -230,16 +240,65 @@ Optional tuning:
 
 - `GET /health`
 - `GET /api/v1/metrics`
+- `GET /api/v1/metrics/prometheus`
 - `GET /api/v1/schema`
 - `POST /api/v1/ask`
 
 Compatibility routes are also kept for the current browser UI and existing callers:
 
 - `GET /metrics`
+- `GET /metrics/prometheus`
 - `GET /schema`
 - `POST /api/ask`
 
-The metrics middleware tracks in-memory request counts, status codes, in-flight requests, exceptions, and per-route timing summaries. Responses also include an `X-Response-Time` header.
+The metrics middleware tracks in-memory request counts, status codes, in-flight requests, exceptions, and per-route timing summaries. Responses also include an `X-Response-Time` header. The Prometheus endpoint exposes scrapeable counters, gauges, and histograms for production monitoring.
+
+## Production Notes
+
+For higher-concurrency environments, the API now uses:
+
+- async Neo4j access via the async driver
+- bounded request admission control for expensive QA flows
+- configurable Neo4j and Ollama connection pools
+- a Prometheus scrape endpoint at `/api/v1/metrics/prometheus`
+- OpenTelemetry tracing exported to Jaeger
+
+Prometheus does not ingest logs directly. This repository now includes a small observability stack where:
+
+- Prometheus scrapes FastAPI metrics
+- Loki stores logs
+- Promtail ships container logs from Docker to Loki
+- Grafana provides a single UI for metrics, logs, and traces
+- Jaeger stores and visualizes distributed traces from FastAPI requests
+
+To start the app together with observability services:
+
+```bash
+cd /home/chuan/Projects/knowledge-graph
+docker compose --profile all up -d api prometheus loki promtail jaeger grafana
+```
+
+Endpoints:
+
+- Grafana UI: `http://localhost:3000`
+- FastAPI metrics: `http://localhost:8000/api/v1/metrics/prometheus`
+- Prometheus UI: `http://localhost:9090`
+- Loki API: `http://localhost:3100`
+- Jaeger UI: `http://localhost:16686`
+
+Grafana notes:
+
+- Grafana is provisioned automatically with Prometheus, Loki, and Jaeger datasources.
+- Default credentials are `admin` / `admin` unless overridden with `GRAFANA_ADMIN_USER` and `GRAFANA_ADMIN_PASSWORD`.
+- If you prefer browser access without login for local demos, set `GRAFANA_ANONYMOUS_ENABLED=true`.
+- FastAPI logs now include `trace_id=` and `span_id=` fields so Loki log lines can link directly into Jaeger traces from Grafana Explore.
+- The default Grafana dashboard includes HTTP, QA, Neo4j, and Ollama panels plus a trace-correlated log stream.
+
+Tracing notes:
+
+- The API exports traces to Jaeger over OTLP HTTP.
+- In Docker Compose, tracing is enabled by default and points to `http://jaeger:4318/v1/traces`.
+- Successful responses include an `X-Trace-Id` header so the request can be found quickly in Jaeger.
 
 Example request:
 
