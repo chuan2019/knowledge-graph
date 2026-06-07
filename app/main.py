@@ -11,6 +11,7 @@ from app.api import ui as ui_router
 from app.api.v1 import metrics as metrics_router
 from app.api.v1 import qa as qa_router
 from app.api.v1 import services as services_router
+from app.api.v1 import vector_qa as vector_qa_router
 from app.core.config import Settings
 from app.core.errors import register_error_handlers
 from app.core.logging import configure_logging
@@ -20,6 +21,8 @@ from app.models.qa import HealthResponse
 from app.services.graph_store import GraphStore
 from app.services.ollama_client import OllamaClient
 from app.services.qa_service import GraphQAService
+from app.services.vector_store import VectorStore
+from app.services.vector_qa_service import VectorQAService
 
 STATIC_DIR = Path(__file__).with_name("static")
 logger = logging.getLogger(__name__)
@@ -55,6 +58,29 @@ async def lifespan(app: FastAPI):
     app.state.ollama_client = ollama_client
     app.state.qa_service = qa_service
     app.state.tracing_manager = tracing_manager
+
+    # Vector store is optional — app starts normally if Weaviate is unavailable.
+    vector_store = VectorStore(settings)
+    vector_qa_service: VectorQAService | None = None
+    try:
+        await vector_store.connect()
+        await vector_store.verify_connectivity()
+        vector_qa_service = VectorQAService(
+            settings,
+            vector_store,
+            ollama_client,
+            metrics_registry=metrics_registry,
+        )
+        logger.info("Vector QA service initialized (Weaviate connected)")
+    except Exception as exc:
+        logger.warning(
+            "Weaviate unavailable — vector QA endpoints will return 503: %s", exc
+        )
+        await vector_store.close()
+        vector_store = None  # type: ignore[assignment]
+
+    app.state.vector_store = vector_store
+    app.state.vector_qa_service = vector_qa_service
     logger.info("Application services initialized successfully")
 
     try:
@@ -64,6 +90,8 @@ async def lifespan(app: FastAPI):
         shutdown_tracing(app, tracing_manager)
         await graph_store.close()
         await ollama_client.close()
+        if vector_store is not None:
+            await vector_store.close()
         logger.info("Application services shut down cleanly")
 
 
@@ -84,6 +112,7 @@ register_error_handlers(app)
 app.include_router(ui_router.router)
 app.include_router(metrics_router.router, prefix="/api/v1")
 app.include_router(qa_router.router, prefix="/api/v1")
+app.include_router(vector_qa_router.router, prefix="/api/v1")
 app.include_router(services_router.router, prefix="/api/v1")
 app.include_router(metrics_router.legacy_router)
 app.include_router(qa_router.legacy_router)

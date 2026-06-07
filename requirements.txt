@@ -36,6 +36,8 @@ attrs==26.1.0
     #   aiohttp
     #   jsonschema
     #   referencing
+authlib==1.7.2
+    # via weaviate-client
 babel==2.18.0
     # via jupyterlab-server
 beautifulsoup4==4.14.3
@@ -50,6 +52,7 @@ certifi==2026.5.20
 cffi==2.0.0
     # via
     #   argon2-cffi-bindings
+    #   cryptography
     #   pyzmq
 charset-normalizer==3.4.7
     # via requests
@@ -67,6 +70,10 @@ comm==0.2.3
     #   ipywidgets
 coverage==7.14.0
     # via pytest-cov
+cryptography==48.0.0
+    # via
+    #   authlib
+    #   joserfc
 debugpy==1.8.20
     # via ipykernel
 decorator==5.3.1
@@ -95,6 +102,8 @@ googleapis-common-protos==1.75.0
     # via opentelemetry-exporter-otlp-proto-http
 greenlet==3.5.1 ; platform_machine == 'AMD64' or platform_machine == 'WIN32' or platform_machine == 'aarch64' or platform_machine == 'amd64' or platform_machine == 'ppc64le' or platform_machine == 'win32' or platform_machine == 'x86_64'
     # via sqlalchemy
+grpcio==1.78.0
+    # via weaviate-client
 h11==0.16.0
     # via
     #   httpcore
@@ -106,6 +115,7 @@ httpx==0.28.1
     #   jupyterlab
     #   knowledge-graph
     #   langsmith
+    #   weaviate-client
 httpx-sse==0.4.3
     # via langchain-community
 idna==3.16
@@ -138,6 +148,8 @@ jinja2==3.1.6
     #   jupyterlab
     #   jupyterlab-server
     #   nbconvert
+joserfc==1.7.0
+    # via authlib
 json5==0.14.0
     # via jupyterlab-server
 jsonpatch==1.33
@@ -303,6 +315,7 @@ packaging==26.2
     #   nbconvert
     #   opentelemetry-instrumentation
     #   pytest
+    #   weaviate-client
 pandas==3.0.3
     # via knowledge-graph
 pandocfilters==1.5.1
@@ -331,6 +344,7 @@ protobuf==6.33.6
     # via
     #   googleapis-common-protos
     #   opentelemetry-proto
+    #   weaviate-client
 psutil==7.2.2
     # via
     #   ipykernel
@@ -354,6 +368,7 @@ pydantic==2.13.4
     #   neo4j-viz
     #   pydantic-extra-types
     #   pydantic-settings
+    #   weaviate-client
 pydantic-core==2.46.4
     # via pydantic
 pydantic-extra-types==2.11.1
@@ -493,6 +508,7 @@ typing-extensions==4.15.0
     #   beautifulsoup4
     #   enum-tools
     #   fastapi
+    #   grpcio
     #   ipython
     #   langchain-core
     #   langchain-protocol
@@ -527,8 +543,12 @@ uuid-utils==0.16.0
     #   langsmith
 uvicorn==0.47.0
     # via knowledge-graph
+validators==0.35.0
+    # via weaviate-client
 wcwidth==0.7.0
     # via prompt-toolkit
+weaviate-client==4.21.3
+    # via knowledge-graph
 webcolors==25.10.0
     # via jsonschema
 webencodings==0.5.1

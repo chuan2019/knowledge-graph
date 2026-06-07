@@ -24,4 +24,5 @@ dependencies = [
     "pytest-cov>=7.1.0",
     "tqdm>=4.67.3",
     "uvicorn>=0.34.2",
+    "weaviate-client>=4.9.0",
 ]
