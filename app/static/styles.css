@@ -567,6 +567,137 @@ button:disabled {
   background: var(--danger);
 }
 
+/* ── Mode toggle ──────────────────────────────────────────────────── */
+
+.mode-toggle {
+  display: inline-flex;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--surface-strong);
+  margin-bottom: 18px;
+  width: 100%;
+}
+
+.mode-btn {
+  flex: 1;
+  border: 0;
+  border-radius: 0;
+  padding: 10px 16px;
+  font: inherit;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease;
+  background: transparent;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.mode-btn:hover {
+  background: rgba(15, 118, 110, 0.06);
+  color: var(--text);
+  transform: none;
+}
+
+.mode-btn.active {
+  background: var(--accent);
+  color: white;
+}
+
+.mode-btn.active:hover {
+  background: var(--accent-strong);
+}
+
+.mode-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+/* Panel visibility per mode */
+.layout[data-mode="vector"] .graph-only {
+  display: none;
+}
+
+.layout[data-mode="graph"] .vector-only {
+  display: none;
+}
+
+.hits-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.87rem;
+}
+
+.hits-table th {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 2px solid var(--border);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--muted);
+}
+
+.hits-table td {
+  padding: 9px 10px;
+  border-bottom: 1px solid rgba(31, 42, 55, 0.07);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.hits-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.hits-table td.synopsis-cell {
+  color: var(--muted);
+  font-size: 0.83rem;
+  max-width: 480px;
+}
+
+.certainty-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.certainty-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(15, 118, 110, 0.12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.certainty-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width 400ms ease;
+}
+
+.certainty-label {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--accent-strong);
+  white-space: nowrap;
+}
+
+.mode-description {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin: 0 0 14px;
+  line-height: 1.55;
+  padding: 10px 14px;
+  background: rgba(15, 118, 110, 0.05);
+  border-radius: 12px;
+  border-left: 3px solid var(--accent);
+}
+
 @media (max-width: 920px) {
   .services-grid {
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

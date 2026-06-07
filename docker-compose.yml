@@ -34,12 +34,19 @@ services:
       OLLAMA_TIMEOUT_SECONDS: ${OLLAMA_TIMEOUT_SECONDS:-90}
       OLLAMA_MAX_CONNECTIONS: ${OLLAMA_MAX_CONNECTIONS:-256}
       OLLAMA_MAX_KEEPALIVE_CONNECTIONS: ${OLLAMA_MAX_KEEPALIVE_CONNECTIONS:-64}
+      WEAVIATE_HOST: weaviate
+      WEAVIATE_HTTP_PORT: "8080"
+      WEAVIATE_GRPC_PORT: "50051"
     restart: unless-stopped
     depends_on:
       neo4j:
         condition: service_healthy
       ollama-pull:
         condition: service_completed_successfully
+      ollama-pull-embed:
+        condition: service_completed_successfully
+      weaviate:
+        condition: service_healthy
       jaeger:
         condition: service_started
     healthcheck:
@@ -125,6 +132,19 @@ services:
     networks:
       - kgrag_net
 
+  ollama-pull-embed:
+    profiles: ["all", "no_app"]
+    image: ollama/ollama:latest
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+    depends_on:
+      ollama:
+        condition: service_healthy
+    command: ["pull", "${OLLAMA_EMBED_MODEL:-nomic-embed-text}"]
+    restart: "no"
+    networks:
+      - kgrag_net
+
   weaviate:
     profiles: ["all", "no_app"]
     image: cr.weaviate.io/semitechnologies/weaviate:1.27.2
@@ -142,6 +162,7 @@ services:
       ENABLE_MODULES: 'text2vec-ollama,generative-ollama'
       # Ollama integration
       OLLAMA_API_ENDPOINT: 'http://ollama:11434'
+      OLLAMA_EMBED_MODEL: ${OLLAMA_EMBED_MODEL:-nomic-embed-text}
     volumes:
       - ./volumes/weaviate:/var/lib/weaviate
     restart: unless-stopped
@@ -149,6 +170,8 @@ services:
       - kgrag_net
     depends_on:
       ollama-pull:
+        condition: service_completed_successfully
+      ollama-pull-embed:
         condition: service_completed_successfully
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/v1/.well-known/ready"]

@@ -34,6 +34,9 @@ class Settings:
     max_query_retries: int = 2
     result_row_limit: int = 25
     cypher_timeout_ms: int = 15000
+    weaviate_host: str = "localhost"
+    weaviate_http_port: int = 8080
+    weaviate_grpc_port: int = 50051
 
     @classmethod
     def from_env(cls) -> "Settings":
@@ -98,5 +101,12 @@ class Settings:
             ),
             cypher_timeout_ms=int(
                 os.getenv("CYPHER_TIMEOUT_MS", str(cls.cypher_timeout_ms))
+            ),
+            weaviate_host=os.getenv("WEAVIATE_HOST", cls.weaviate_host),
+            weaviate_http_port=int(
+                os.getenv("WEAVIATE_HTTP_PORT", str(cls.weaviate_http_port))
+            ),
+            weaviate_grpc_port=int(
+                os.getenv("WEAVIATE_GRPC_PORT", str(cls.weaviate_grpc_port))
             ),
         )
