@@ -12,8 +12,16 @@ const rowCount = document.getElementById("rowCount");
 const statusText = document.getElementById("statusText");
 const healthBadge = document.getElementById("healthBadge");
 
-const SAMPLE_QUESTION =
-  "Which Tier 1 clients have active rights for localized versions with delayed delivery requests?";
+const SAMPLE_QUESTIONS = [
+  "Which Tier 1 clients have active rights for localized versions with delayed delivery requests?",
+  "Which active rights are expiring in the next 90 days, and which clients and regions are affected?",
+  "Which delivery points have the most failed or delayed delivery requests?",
+  "What titles have 4K or 8K versions with no delivery requests created yet?",
+  "Which languages have the most completed localization jobs, and what are their average quality scores?",
+  "Which studios have the most titles with active exclusive rights grants?",
+  "Show all high-priority delivery requests that missed their deadline, and which clients submitted them.",
+  "Which vendors completed the most localization jobs, and what is their average quality score?",
+];
 
 function setStatus(message, isError = false) {
   statusText.textContent = message;
@@ -80,9 +88,56 @@ async function checkHealth() {
   }
 }
 
-sampleButton.addEventListener("click", () => {
-  questionInput.value = SAMPLE_QUESTION;
-  questionInput.focus();
+const sampleDropdown = document.getElementById("sampleDropdown");
+const sampleList = document.getElementById("sampleList");
+
+// Move list to <body> so it escapes the backdrop-filter stacking context on .panel,
+// which would otherwise make position:fixed unreliable and clip z-index layering.
+document.body.appendChild(sampleList);
+
+SAMPLE_QUESTIONS.forEach((q, i) => {
+  const li = document.createElement("li");
+  li.textContent = q;
+  li.setAttribute("role", "option");
+  li.addEventListener("click", () => {
+    questionInput.value = q;
+    sampleButton.textContent = `Sample question (${i + 1}/${SAMPLE_QUESTIONS.length}) ▾`;
+    closeSampleDropdown();
+    questionInput.focus();
+  });
+  sampleList.appendChild(li);
+});
+
+function closeSampleDropdown() {
+  sampleList.classList.remove("open");
+  sampleButton.setAttribute("aria-expanded", "false");
+}
+
+sampleButton.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (sampleList.classList.contains("open")) {
+    closeSampleDropdown();
+    return;
+  }
+  // Reveal first so offsetHeight is measurable, then position relative to button.
+  sampleList.classList.add("open");
+  sampleButton.setAttribute("aria-expanded", "true");
+
+  const rect = sampleButton.getBoundingClientRect();
+  const listW = sampleList.offsetWidth;
+  const listH = sampleList.offsetHeight;
+  const left = Math.max(8, rect.right - listW);
+  const topAbove = rect.top - listH - 8;
+  const top = topAbove >= 8 ? topAbove : rect.bottom + 8;
+
+  sampleList.style.left = `${left}px`;
+  sampleList.style.top = `${top}px`;
+});
+
+document.addEventListener("click", (e) => {
+  if (!sampleDropdown.contains(e.target) && !sampleList.contains(e.target)) {
+    closeSampleDropdown();
+  }
 });
 
 askForm.addEventListener("submit", async (event) => {

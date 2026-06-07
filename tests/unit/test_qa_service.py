@@ -73,6 +73,24 @@ class GraphQAServiceUnitTestCase(unittest.IsolatedAsyncioTestCase):
             any("Cypher execution failed on attempt 1: bad query" in message for message in captured.output)
         )
 
+    async def test_plan_cypher_logs_generated_query_at_debug_level(self) -> None:
+        self.ollama_client.generate_json = AsyncMock(
+            return_value={"cypher": "  MATCH (n) RETURN n LIMIT 1  ", "rationale": "stub"}
+        )
+
+        with self.assertLogs("app.services.qa_service", level="DEBUG") as captured:
+            cypher = await self.service._plan_cypher(
+                question="test question",
+                model=None,
+                error_feedback=None,
+                previous_query=None,
+            )
+
+        self.assertEqual(cypher, "MATCH (n) RETURN n LIMIT 1")
+        self.assertTrue(
+            any("Planner generated Cypher: MATCH (n) RETURN n LIMIT 1" in message for message in captured.output)
+        )
+
     async def test_answer_question_raises_after_exhausted_retries(self) -> None:
         self.ollama_client.generate_json = AsyncMock(
             return_value={"cypher": "MATCH (n RETURN n", "rationale": "broken"}
