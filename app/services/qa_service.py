@@ -242,9 +242,11 @@ class GraphQAService:
             cypher = plan.get("cypher")
             if not isinstance(cypher, str) or not cypher.strip():
                 raise ValueError(f"Planner did not return a usable Cypher query: {json.dumps(plan)}")
-            span.set_attribute("qa.cypher_length", len(cypher.strip()))
+            normalized_cypher = cypher.strip()
+            span.set_attribute("qa.cypher_length", len(normalized_cypher))
             logger.debug("Planner response contained a usable Cypher query")
-            return cypher.strip()
+            logger.debug("Planner generated Cypher: %s", normalized_cypher)
+            return normalized_cypher
 
     async def _summarize_answer(
         self,

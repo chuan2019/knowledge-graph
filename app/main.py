@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from app.api import ui as ui_router
 from app.api.v1 import metrics as metrics_router
 from app.api.v1 import qa as qa_router
+from app.api.v1 import services as services_router
 from app.core.config import Settings
 from app.core.errors import register_error_handlers
 from app.core.logging import configure_logging
@@ -83,6 +84,7 @@ register_error_handlers(app)
 app.include_router(ui_router.router)
 app.include_router(metrics_router.router, prefix="/api/v1")
 app.include_router(qa_router.router, prefix="/api/v1")
+app.include_router(services_router.router, prefix="/api/v1")
 app.include_router(metrics_router.legacy_router)
 app.include_router(qa_router.legacy_router)
 

@@ -12,8 +12,16 @@ const rowCount = document.getElementById("rowCount");
 const statusText = document.getElementById("statusText");
 const healthBadge = document.getElementById("healthBadge");
 
-const SAMPLE_QUESTION =
-  "Which Tier 1 clients have active rights for localized versions with delayed delivery requests?";
+const SAMPLE_QUESTIONS = [
+  "Which delivery points have the most failed or delayed delivery requests?",
+  "What titles have 4K or 8K versions with no delivery requests created yet?",
+  "Which languages have the most completed localization jobs, and what are their average quality scores?",
+  "Which studios have the most titles with active exclusive rights grants?",
+  "Show all high-priority delivery requests that missed their deadline, and which clients submitted them.",
+  "Which vendors completed the most localization jobs, and what is their average quality score?",
+  "Which Tier 1 clients have active rights for localized versions with delayed delivery requests?",
+  "Which active rights are expiring in the next 90 days, and which clients and regions are affected?",
+];
 
 function setStatus(message, isError = false) {
   statusText.textContent = message;
@@ -29,6 +37,20 @@ function setAnswer(text, isError = false) {
 function setLoading(isLoading) {
   submitButton.disabled = isLoading;
   submitButton.textContent = isLoading ? "Working..." : "Ask the graph";
+}
+
+function setTraceLink(traceId) {
+  const el = document.getElementById("jaegerLink");
+  if (!el) return;
+  if (!traceId) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  el.hidden = false;
+  el.innerHTML =
+    `<span class="jaeger-link-label">Trace:</span>` +
+    `<a href="http://localhost:16686/trace/${traceId}" target="_blank" rel="noopener noreferrer">${traceId}</a>`;
 }
 
 function renderTrace(trace = []) {
@@ -80,9 +102,56 @@ async function checkHealth() {
   }
 }
 
-sampleButton.addEventListener("click", () => {
-  questionInput.value = SAMPLE_QUESTION;
-  questionInput.focus();
+const sampleDropdown = document.getElementById("sampleDropdown");
+const sampleList = document.getElementById("sampleList");
+
+// Move list to <body> so it escapes the backdrop-filter stacking context on .panel,
+// which would otherwise make position:fixed unreliable and clip z-index layering.
+document.body.appendChild(sampleList);
+
+SAMPLE_QUESTIONS.forEach((q, i) => {
+  const li = document.createElement("li");
+  li.textContent = q;
+  li.setAttribute("role", "option");
+  li.addEventListener("click", () => {
+    questionInput.value = q;
+    sampleButton.textContent = `Sample question (${i + 1}/${SAMPLE_QUESTIONS.length}) ▾`;
+    closeSampleDropdown();
+    questionInput.focus();
+  });
+  sampleList.appendChild(li);
+});
+
+function closeSampleDropdown() {
+  sampleList.classList.remove("open");
+  sampleButton.setAttribute("aria-expanded", "false");
+}
+
+sampleButton.addEventListener("click", (e) => {
+  e.stopPropagation();
+  if (sampleList.classList.contains("open")) {
+    closeSampleDropdown();
+    return;
+  }
+  // Reveal first so offsetHeight is measurable, then position relative to button.
+  sampleList.classList.add("open");
+  sampleButton.setAttribute("aria-expanded", "true");
+
+  const rect = sampleButton.getBoundingClientRect();
+  const listW = sampleList.offsetWidth;
+  const listH = sampleList.offsetHeight;
+  const left = Math.max(8, rect.right - listW);
+  const topAbove = rect.top - listH - 8;
+  const top = topAbove >= 8 ? topAbove : rect.bottom + 8;
+
+  sampleList.style.left = `${left}px`;
+  sampleList.style.top = `${top}px`;
+});
+
+document.addEventListener("click", (e) => {
+  if (!sampleDropdown.contains(e.target) && !sampleList.contains(e.target)) {
+    closeSampleDropdown();
+  }
 });
 
 askForm.addEventListener("submit", async (event) => {
@@ -96,6 +165,7 @@ askForm.addEventListener("submit", async (event) => {
   }
 
   setLoading(true);
+  setTraceLink(null);
   setStatus("Planning query and asking the graph...");
   setAnswer("Working on your question...");
   cypherBox.textContent = "Waiting for generated Cypher...";
@@ -124,10 +194,13 @@ askForm.addEventListener("submit", async (event) => {
 
     const data = await response.json();
     if (!response.ok) {
+      const traceId = response.headers.get("X-Trace-Id");
+      setTraceLink(traceId);
       const detail = typeof data.detail === "string" ? data.detail : "Request failed.";
       throw new Error(detail);
     }
 
+    setTraceLink(null);
     setStatus("Answer ready");
     setAnswer(data.answer || "No answer returned.");
     cypherBox.textContent = data.cypher || "No Cypher returned.";
@@ -147,3 +220,37 @@ askForm.addEventListener("submit", async (event) => {
 });
 
 checkHealth();
+checkServices();
+
+async function checkServices() {
+  try {
+    const response = await fetch("/api/v1/services");
+    if (!response.ok) return;
+    const services = await response.json();
+
+    const healthyCount = services.filter((s) => s.healthy === true).length;
+    const total = services.length;
+    const summary = document.getElementById("servicesSummary");
+    if (summary) {
+      summary.textContent = `${healthyCount} / ${total} healthy`;
+    }
+
+    services.forEach((svc) => {
+      const dot = document.getElementById(`dot-${svc.id}`);
+      if (!dot) return;
+      dot.classList.remove("healthy", "unhealthy");
+      if (svc.healthy === true) {
+        dot.classList.add("healthy");
+        dot.title = "Healthy";
+      } else if (svc.healthy === false) {
+        dot.classList.add("unhealthy");
+        dot.title = "Unreachable";
+      } else {
+        dot.title = "Unknown";
+      }
+    });
+  } catch (_) {
+    const summary = document.getElementById("servicesSummary");
+    if (summary) summary.textContent = "Status unavailable";
+  }
+}

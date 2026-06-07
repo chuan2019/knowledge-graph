@@ -13,8 +13,12 @@ DEFAULT_LOG_FORMAT = (
 
 class TraceContextFilter(logging.Filter):
     def filter(self, record: logging.LogRecord) -> bool:
-        record.trace_id = current_trace_id() or "-"
-        record.span_id = current_span_id() or "-"
+        # Don't overwrite values already injected via `extra=` (e.g. from error
+        # handlers that run outside the active span and supply the stashed IDs).
+        if not hasattr(record, "trace_id"):
+            record.trace_id = current_trace_id() or "-"
+        if not hasattr(record, "span_id"):
+            record.span_id = current_span_id() or "-"
         return True
 
 

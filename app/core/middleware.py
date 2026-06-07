@@ -13,7 +13,7 @@ from opentelemetry import trace
 from prometheus_client import CONTENT_TYPE_LATEST, CollectorRegistry, Counter, Gauge, Histogram, generate_latest
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.core.tracing import current_trace_id
+from app.core.tracing import current_span_id, current_trace_id
 
 
 logger = logging.getLogger(__name__)
@@ -229,6 +229,12 @@ class MetricsMiddleware(BaseHTTPMiddleware):
         with tracer.start_as_current_span(f"{request.method} {request.url.path}") as span:
             span.set_attribute("http.request.method", request.method)
             span.set_attribute("url.path", request.url.path)
+
+            # Stash trace context in request.state before call_next so that error
+            # handlers called outside this span (by ServerErrorMiddleware) can still
+            # access the IDs.
+            request.state.trace_id = current_trace_id()
+            request.state.span_id = current_span_id()
 
             try:
                 response = await call_next(request)
