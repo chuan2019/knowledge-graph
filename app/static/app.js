@@ -13,14 +13,14 @@ const statusText = document.getElementById("statusText");
 const healthBadge = document.getElementById("healthBadge");
 
 const SAMPLE_QUESTIONS = [
-  "Which Tier 1 clients have active rights for localized versions with delayed delivery requests?",
-  "Which active rights are expiring in the next 90 days, and which clients and regions are affected?",
   "Which delivery points have the most failed or delayed delivery requests?",
   "What titles have 4K or 8K versions with no delivery requests created yet?",
   "Which languages have the most completed localization jobs, and what are their average quality scores?",
   "Which studios have the most titles with active exclusive rights grants?",
   "Show all high-priority delivery requests that missed their deadline, and which clients submitted them.",
   "Which vendors completed the most localization jobs, and what is their average quality score?",
+  "Which Tier 1 clients have active rights for localized versions with delayed delivery requests?",
+  "Which active rights are expiring in the next 90 days, and which clients and regions are affected?",
 ];
 
 function setStatus(message, isError = false) {
