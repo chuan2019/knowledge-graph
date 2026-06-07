@@ -13,7 +13,7 @@ from opentelemetry import trace
 from prometheus_client import CONTENT_TYPE_LATEST, CollectorRegistry, Counter, Gauge, Histogram, generate_latest
 from starlette.middleware.base import BaseHTTPMiddleware
 
-from app.core.tracing import current_trace_id
+from app.core.tracing import current_span_id, current_trace_id
 
 
 logger = logging.getLogger(__name__)
