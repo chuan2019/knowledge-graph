@@ -39,6 +39,20 @@ function setLoading(isLoading) {
   submitButton.textContent = isLoading ? "Working..." : "Ask the graph";
 }
 
+function setTraceLink(traceId) {
+  const el = document.getElementById("jaegerLink");
+  if (!el) return;
+  if (!traceId) {
+    el.hidden = true;
+    el.innerHTML = "";
+    return;
+  }
+  el.hidden = false;
+  el.innerHTML =
+    `<span class="jaeger-link-label">Trace:</span>` +
+    `<a href="http://localhost:16686/trace/${traceId}" target="_blank" rel="noopener noreferrer">${traceId}</a>`;
+}
+
 function renderTrace(trace = []) {
   traceList.innerHTML = "";
   traceList.classList.toggle("empty", trace.length === 0);
@@ -151,6 +165,7 @@ askForm.addEventListener("submit", async (event) => {
   }
 
   setLoading(true);
+  setTraceLink(null);
   setStatus("Planning query and asking the graph...");
   setAnswer("Working on your question...");
   cypherBox.textContent = "Waiting for generated Cypher...";
@@ -179,10 +194,13 @@ askForm.addEventListener("submit", async (event) => {
 
     const data = await response.json();
     if (!response.ok) {
+      const traceId = response.headers.get("X-Trace-Id");
+      setTraceLink(traceId);
       const detail = typeof data.detail === "string" ? data.detail : "Request failed.";
       throw new Error(detail);
     }
 
+    setTraceLink(null);
     setStatus("Answer ready");
     setAnswer(data.answer || "No answer returned.");
     cypherBox.textContent = data.cypher || "No Cypher returned.";
@@ -202,3 +220,37 @@ askForm.addEventListener("submit", async (event) => {
 });
 
 checkHealth();
+checkServices();
+
+async function checkServices() {
+  try {
+    const response = await fetch("/api/v1/services");
+    if (!response.ok) return;
+    const services = await response.json();
+
+    const healthyCount = services.filter((s) => s.healthy === true).length;
+    const total = services.length;
+    const summary = document.getElementById("servicesSummary");
+    if (summary) {
+      summary.textContent = `${healthyCount} / ${total} healthy`;
+    }
+
+    services.forEach((svc) => {
+      const dot = document.getElementById(`dot-${svc.id}`);
+      if (!dot) return;
+      dot.classList.remove("healthy", "unhealthy");
+      if (svc.healthy === true) {
+        dot.classList.add("healthy");
+        dot.title = "Healthy";
+      } else if (svc.healthy === false) {
+        dot.classList.add("unhealthy");
+        dot.title = "Unreachable";
+      } else {
+        dot.title = "Unknown";
+      }
+    });
+  } catch (_) {
+    const summary = document.getElementById("servicesSummary");
+    if (summary) summary.textContent = "Status unavailable";
+  }
+}

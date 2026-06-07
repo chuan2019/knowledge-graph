@@ -103,6 +103,7 @@
             <span id="statusText" class="status-text">Ready</span>
           </div>
           <div id="answerBox" class="answer-box empty">No answer yet.</div>
+          <div id="jaegerLink" class="jaeger-link" hidden></div>
         </section>
 
         <section class="panel detail-panel">
@@ -129,6 +130,86 @@
           <div id="rowsBox" class="rows-box empty">No rows yet.</div>
         </section>
       </main>
+
+      <details class="services-panel">
+        <summary>System Services <span class="services-summary" id="servicesSummary">Checking&hellip;</span></summary>
+        <div class="services-body">
+        <div class="services-grid">
+
+          <a class="svc-card svc-cat-obs" href="http://localhost:3000" target="_blank" rel="noopener noreferrer" data-id="grafana">
+            <div class="svc-avatar svc-obs">G</div>
+            <div class="svc-body">
+              <div class="svc-name">Grafana <span class="svc-badge svc-badge-ui">UI</span></div>
+              <div class="svc-desc">Dashboards &amp; visualizations</div>
+              <div class="svc-port">:3000</div>
+            </div>
+            <span class="svc-dot" id="dot-grafana"></span>
+          </a>
+
+          <a class="svc-card svc-cat-obs" href="http://localhost:9090" target="_blank" rel="noopener noreferrer" data-id="prometheus">
+            <div class="svc-avatar svc-obs">P</div>
+            <div class="svc-body">
+              <div class="svc-name">Prometheus <span class="svc-badge svc-badge-ui">UI</span></div>
+              <div class="svc-desc">Metrics &amp; alerting</div>
+              <div class="svc-port">:9090</div>
+            </div>
+            <span class="svc-dot" id="dot-prometheus"></span>
+          </a>
+
+          <a class="svc-card svc-cat-obs" href="http://localhost:16686" target="_blank" rel="noopener noreferrer" data-id="jaeger">
+            <div class="svc-avatar svc-obs">J</div>
+            <div class="svc-body">
+              <div class="svc-name">Jaeger <span class="svc-badge svc-badge-ui">UI</span></div>
+              <div class="svc-desc">Distributed tracing</div>
+              <div class="svc-port">:16686</div>
+            </div>
+            <span class="svc-dot" id="dot-jaeger"></span>
+          </a>
+
+          <a class="svc-card svc-cat-obs" href="http://localhost:3100" target="_blank" rel="noopener noreferrer" data-id="loki">
+            <div class="svc-avatar svc-obs">L</div>
+            <div class="svc-body">
+              <div class="svc-name">Loki <span class="svc-badge svc-badge-api">API</span></div>
+              <div class="svc-desc">Log aggregation</div>
+              <div class="svc-port">:3100</div>
+            </div>
+            <span class="svc-dot" id="dot-loki"></span>
+          </a>
+
+          <a class="svc-card svc-cat-storage" href="http://localhost:7474" target="_blank" rel="noopener noreferrer" data-id="neo4j">
+            <div class="svc-avatar svc-storage">N</div>
+            <div class="svc-body">
+              <div class="svc-name">Neo4j <span class="svc-badge svc-badge-ui">UI</span></div>
+              <div class="svc-desc">Graph database</div>
+              <div class="svc-port">:7474</div>
+            </div>
+            <span class="svc-dot" id="dot-neo4j"></span>
+          </a>
+
+          <a class="svc-card svc-cat-storage" href="http://localhost:8080" target="_blank" rel="noopener noreferrer" data-id="weaviate">
+            <div class="svc-avatar svc-storage">W</div>
+            <div class="svc-body">
+              <div class="svc-name">Weaviate <span class="svc-badge svc-badge-api">API</span></div>
+              <div class="svc-desc">Vector database</div>
+              <div class="svc-port">:8080</div>
+            </div>
+            <span class="svc-dot" id="dot-weaviate"></span>
+          </a>
+
+          <a class="svc-card svc-cat-model" href="http://localhost:11434" target="_blank" rel="noopener noreferrer" data-id="ollama">
+            <div class="svc-avatar svc-model">O</div>
+            <div class="svc-body">
+              <div class="svc-name">Ollama <span class="svc-badge svc-badge-api">API</span></div>
+              <div class="svc-desc">LLM runtime</div>
+              <div class="svc-port">:11434</div>
+            </div>
+            <span class="svc-dot" id="dot-ollama"></span>
+          </a>
+
+        </div>
+        </div>
+      </details>
+
     </div>
 
     <script src="/static/app.js" defer></script>
