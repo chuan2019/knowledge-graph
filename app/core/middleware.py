@@ -230,6 +230,12 @@ class MetricsMiddleware(BaseHTTPMiddleware):
             span.set_attribute("http.request.method", request.method)
             span.set_attribute("url.path", request.url.path)
 
+            # Stash trace context in request.state before call_next so that error
+            # handlers called outside this span (by ServerErrorMiddleware) can still
+            # access the IDs.
+            request.state.trace_id = current_trace_id()
+            request.state.span_id = current_span_id()
+
             try:
                 response = await call_next(request)
                 status_code = response.status_code

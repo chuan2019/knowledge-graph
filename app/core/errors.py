@@ -43,36 +43,53 @@ class TooManyRequestsError(AppError):
         )
 
 
+def _request_trace_context(request: Request) -> tuple[str, str]:
+    """Return (trace_id, span_id) stashed by MetricsMiddleware, or ('-', '-')."""
+    trace_id = getattr(request.state, "trace_id", None) or "-"
+    span_id = getattr(request.state, "span_id", None) or "-"
+    return trace_id, span_id
+
+
 def register_error_handlers(app: FastAPI) -> None:
     """Register global exception handlers on the FastAPI app."""
 
     @app.exception_handler(AppError)
     async def app_error_handler(request: Request, exc: AppError):
+        trace_id, span_id = _request_trace_context(request)
         logger.warning(
             "Application error on %s %s: %s detail=%s",
             request.method,
             request.url.path,
             exc.message,
             exc.detail,
+            extra={"trace_id": trace_id, "span_id": span_id},
         )
-        return JSONResponse(
+        response = JSONResponse(
             status_code=exc.status_code,
             content={"error": exc.message, "detail": exc.detail},
         )
+        if trace_id != "-":
+            response.headers["X-Trace-Id"] = trace_id
+        return response
 
     @app.exception_handler(Exception)
     async def unhandled_error_handler(request: Request, exc: Exception):
+        trace_id, span_id = _request_trace_context(request)
         logger.error(
             "Unhandled exception on %s %s: %s\n%s",
             request.method,
             request.url.path,
             exc,
             traceback.format_exc(),
+            extra={"trace_id": trace_id, "span_id": span_id},
         )
-        return JSONResponse(
+        response = JSONResponse(
             status_code=500,
             content={
                 "error": "Internal server error",
                 "detail": str(exc) if logger.isEnabledFor(logging.DEBUG) else "",
             },
         )
+        if trace_id != "-":
+            response.headers["X-Trace-Id"] = trace_id
+        return response
