@@ -21,25 +21,25 @@
         <summary>About the dataset</summary>
         <div class="dataset-body">
           <p>
-            This is a <strong>synthetic media-operations knowledge graph</strong> modelling the content
-            delivery supply chain of a fictitious media company. All data is generated for demonstration
-            purposes. The graph contains roughly <strong>5,000 titles</strong>, 15,000 versions, 200 clients,
-            50 regions, 30 languages, 150 delivery points, 50,000 rights grants, 10,000 localization jobs,
-            900 delivery specs, and 20,000 delivery requests.
+            This is a <strong>synthetic media-operations dataset</strong> modelling the content delivery supply chain
+            of a fictitious media company. All data is generated for demonstration purposes. It backs two RAG paths:
+            a <strong>Neo4j knowledge graph</strong> for structured relational queries, and a
+            <strong>Weaviate vector store</strong> for semantic content discovery.
           </p>
           <div class="dataset-grid">
             <div>
               <h4>Catalog</h4>
               <ul>
-                <li><strong>Title</strong> — films and TV series with genre, studio, and release year.</li>
-                <li><strong>Version</strong> — format variants of a title: resolution (HD/4K/8K), HDR format, audio channels, localization flag.</li>
+                <li><strong>Title</strong> — 5,000 films, TV series, documentaries, and specials with genre, studio, and release year.</li>
+                <li><strong>Synopsis</strong> — a free-text narrative description generated for each title, used as the embedding source for Vector RAG.</li>
+                <li><strong>Version</strong> — ~17,700 format variants per title: resolution (HD/4K/8K), HDR format, audio channels, localization flag.</li>
               </ul>
             </div>
             <div>
               <h4>Rights &amp; Clients</h4>
               <ul>
-                <li><strong>Client</strong> — studios, broadcasters, and streamers tiered as Tier 1 / Tier 2 / Tier 3.</li>
-                <li><strong>Rights</strong> — territorial grants with start/end dates, exclusivity windows, and active status.</li>
+                <li><strong>Client</strong> — 200 studios, broadcasters, and streamers tiered as Tier 1 / Tier 2 / Tier 3.</li>
+                <li><strong>Rights</strong> — ~53,000 territorial grants with start/end dates, exclusivity windows, and active status.</li>
                 <li><strong>Region</strong> — 50 countries grouped by continent.</li>
               </ul>
             </div>
@@ -47,16 +47,26 @@
               <h4>Localization</h4>
               <ul>
                 <li><strong>Language</strong> — 30 languages with family grouping.</li>
-                <li><strong>LocalizationJob</strong> — dubbing or subtitling tasks with completion status, vendor, and quality score (0–100).</li>
+                <li><strong>LocalizationJob</strong> — ~17,800 dubbing or subtitling tasks with completion status, vendor, and quality score (0–100).</li>
               </ul>
             </div>
             <div>
               <h4>Delivery Pipeline</h4>
               <ul>
-                <li><strong>DeliveryPoint</strong> — named endpoints (e.g. streaming platforms, broadcast outlets) linked to a region.</li>
-                <li><strong>DeliverySpec</strong> — format requirements per delivery point and version.</li>
-                <li><strong>DeliveryRequest</strong> — orders with priority, deadline, and status (Pending / In Progress / Completed / Failed / Delayed).</li>
+                <li><strong>DeliveryPoint</strong> — 150 named endpoints (streaming platforms, broadcast outlets) linked to a region.</li>
+                <li><strong>DeliverySpec</strong> — ~600 format requirements per delivery point and version.</li>
+                <li><strong>DeliveryRequest</strong> — 20,000 orders with priority, deadline, and status (Pending / In Progress / Completed / Failed / Delayed).</li>
               </ul>
+            </div>
+          </div>
+          <div class="dataset-stores">
+            <div class="store-card store-graph">
+              <div class="store-label">Neo4j — Graph RAG</div>
+              <p>Nodes and relationships model the full operational supply chain. The LLM translates natural-language questions into Cypher, executes them, and synthesises answers from the returned rows. Best for structured, relational questions: rights lookups, delivery status, client tiers.</p>
+            </div>
+            <div class="store-card store-vector">
+              <div class="store-label">Weaviate — Vector RAG</div>
+              <p>Each title's synopsis is embedded with <strong>nomic-embed-text</strong> via Ollama and indexed in Weaviate. Queries are embedded at search time and matched by cosine similarity. Best for semantic content discovery: finding titles by theme, mood, or narrative style.</p>
             </div>
           </div>
         </div>

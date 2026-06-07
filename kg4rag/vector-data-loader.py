@@ -54,9 +54,12 @@ def load_data() -> None:
         client.collections.create(
             name=COLLECTION_NAME,
             description="Media content titles with semantic synopses for vector similarity search",
-            vectorizer_config=wvc.config.Configure.Vectorizer.text2vec_ollama(
+            vector_config=wvc.config.Configure.Vectors.text2vec_ollama(
+                name="content",
                 api_endpoint=OLLAMA_BASE_URL,
                 model=OLLAMA_EMBED_MODEL,
+                source_properties=["title_name", "genre", "title_type", "synopsis"],
+                vectorize_collection_name=False,
             ),
             generative_config=wvc.config.Configure.Generative.ollama(
                 api_endpoint=OLLAMA_BASE_URL,

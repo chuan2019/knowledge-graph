@@ -134,6 +134,57 @@ body {
   margin-bottom: 4px;
 }
 
+.dataset-stores {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.store-card {
+  border-radius: 14px;
+  padding: 14px 16px;
+  border-left: 4px solid transparent;
+}
+
+.store-card p {
+  margin: 6px 0 0;
+  font-size: 0.87rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.store-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.store-graph {
+  background: rgba(15, 118, 110, 0.06);
+  border-left-color: var(--accent);
+}
+
+.store-graph .store-label {
+  color: var(--accent-strong);
+}
+
+.store-vector {
+  background: rgba(67, 56, 202, 0.06);
+  border-left-color: #4338ca;
+}
+
+.store-vector .store-label {
+  color: #3730a3;
+}
+
+@media (max-width: 640px) {
+  .dataset-stores {
+    grid-template-columns: 1fr;
+  }
+}
+
 .layout {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));

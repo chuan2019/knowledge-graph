@@ -71,6 +71,7 @@ class VectorStore:
             response = await collection.query.near_text(
                 query=query,
                 limit=limit,
+                target_vector="content",
                 return_metadata=wvc.query.MetadataQuery(certainty=True, distance=True),
             )
 
