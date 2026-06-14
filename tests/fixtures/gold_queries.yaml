@@ -113,7 +113,8 @@
     MATCH (rg:Rights)-[:FOR_VERSION]->(v)
     MATCH (rg)-[:GRANTED_TO]->(c:Client)
     MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v)
-    MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)-[:LOCATED_IN]->(r:Region)
+    MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)
+    MATCH (dp)-[:LOCATED_IN]->(r:Region)
     WHERE c.tier = 'Tier 1'
       AND rg.is_active = true
       AND v.is_localized = true
