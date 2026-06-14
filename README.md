@@ -14,6 +14,10 @@ The current focus is the `kg4rag` demo, which generates a synthetic media-operat
 	Loads the generated CSV files into Neo4j using the Python driver.
 - `kg4rag/kg_demo_data/`
 	Output folder for generated CSV files and supporting demo artifacts.
+- `app/`
+	FastAPI web service: natural-language question → LLM-generated Cypher → Neo4j → synthesized answer.
+- `tests/`
+	Unit and integration test suite, including a gold-query evaluation dataset.
 - `notebooks/`
 	Notebooks for graph-related exploration.
 
@@ -39,7 +43,6 @@ This project uses `uv` and defines dependencies in [pyproject.toml](pyproject.to
 Create or sync the environment with:
 
 ```bash
-cd /home/chuan/Documents/My_Study/AI/knowledge-graph
 uv sync
 ```
 
@@ -50,14 +53,12 @@ If you prefer `pip`, the dependency list is mirrored in [requirements.txt](requi
 To start Neo4j only:
 
 ```bash
-cd /home/chuan/Documents/My_Study/AI/knowledge-graph
 docker compose up -d neo4j
 ```
 
 To start all services:
 
 ```bash
-cd /home/chuan/Documents/My_Study/AI/knowledge-graph
 docker compose up -d
 ```
 
@@ -79,7 +80,6 @@ The main generator builds a synthetic media supply-chain dataset with entities s
 Run the generator with:
 
 ```bash
-cd /home/chuan/Documents/My_Study/AI/knowledge-graph
 uv run python kg4rag/kg-data-gen.py
 ```
 
@@ -107,7 +107,6 @@ The generator creates CSV files such as:
 After generating the CSV files, load them into Neo4j with:
 
 ```bash
-cd /home/chuan/Documents/My_Study/AI/knowledge-graph
 uv run python kg4rag/kg-data-loader.py
 ```
 
@@ -130,7 +129,7 @@ You can override them with environment variables:
 NEO4J_URI=bolt://localhost:7687 \
 NEO4J_USER=neo4j \
 NEO4J_PASSWORD=testpass \
-KG_DATA_DIR=/home/chuan/Documents/My_Study/AI/knowledge-graph/kg4rag/kg_demo_data \
+KG_DATA_DIR=kg4rag/kg_demo_data \
 uv run python kg4rag/kg-data-loader.py
 ```
 
@@ -170,7 +169,6 @@ ollama pull llama3.2
 If you use Docker Compose from this repo, start Neo4j and Ollama with:
 
 ```bash
-cd /home/chuan/Projects/knowledge-graph
 docker compose up -d neo4j ollama
 ```
 
@@ -183,7 +181,6 @@ ollama pull llama3.2
 To run the API in Docker as well:
 
 ```bash
-cd /home/chuan/Projects/knowledge-graph
 docker compose up -d api neo4j ollama
 ```
 
@@ -197,7 +194,6 @@ Compose also starts a one-shot `ollama-pull` service that ensures the configured
 ### Start the API
 
 ```bash
-cd /home/chuan/Projects/knowledge-graph
 uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
@@ -274,7 +270,6 @@ Prometheus does not ingest logs directly. This repository now includes a small o
 To start the app together with observability services:
 
 ```bash
-cd /home/chuan/Projects/knowledge-graph
 docker compose --profile all up -d api prometheus loki promtail jaeger grafana
 ```
 
@@ -334,10 +329,59 @@ Example response shape:
 }
 ```
 
+## Testing
+
+The test suite is split into unit tests (no external services required) and integration tests (require the demo stack).
+
+### Unit Tests
+
+```bash
+uv run pytest tests/unit/ -v
+```
+
+Covers the Cypher normalization pipeline in `graph_store.py`, the QA service retry and concurrency logic, the Ollama client, and the metrics middleware. All tests mock external dependencies.
+
+### Integration Tests
+
+```bash
+# Start the demo stack first
+docker compose --profile all up -d
+
+# Run integration tests
+uv run pytest tests/integration/ -v
+```
+
+Integration tests that cannot reach Neo4j skip gracefully so the suite can still run in CI without the database.
+
+#### Gold Query Evaluation
+
+`tests/fixtures/gold_queries.yaml` contains hand-verified Cypher for all eight built-in sample questions. Each entry includes:
+
+| Field | Purpose |
+|---|---|
+| `id` | Stable identifier used in test parametrisation |
+| `question` | Exact natural-language question shown in the UI |
+| `cypher` | Hand-verified Cypher that returns the correct answer |
+| `expected_columns` | Column names the query must return |
+| `min_rows` | Minimum acceptable row count against the demo data |
+
+`tests/integration/test_gold_queries.py` runs every gold query against the live Neo4j instance and checks that:
+
+- each query executes without error
+- each result has the expected columns
+- each query returns at least `min_rows` rows
+
+The gold dataset provides a stable baseline for catching regressions after prompt changes, schema changes, or model upgrades — the LLM planner can produce structurally different Cypher across runs, and the gold queries confirm that the intended question is answered correctly regardless of which path the LLM takes.
+
+### Run the Full Suite
+
+```bash
+uv run pytest tests/ -v
+```
+
 ## Example Workflow
 
 ```bash
-cd /home/chuan/Projects/knowledge-graph
 docker compose up -d neo4j
 uv sync
 uv run python kg4rag/kg-data-gen.py
