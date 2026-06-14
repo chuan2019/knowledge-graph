@@ -99,6 +99,7 @@ class GraphStore:
 
         original_query = normalized_query
         normalized_query = self._rewrite_legacy_exists_patterns(normalized_query)
+        normalized_query = self._rewrite_wrapped_continuations(normalized_query)
         normalized_query = self._rewrite_bare_pattern_lines(normalized_query)
 
         if normalized_query != original_query:
@@ -130,6 +131,60 @@ class GraphStore:
             )
 
         return normalized_query
+
+    @staticmethod
+    def _rewrite_wrapped_continuations(query: str) -> str:
+        """Fix the LLM anti-pattern of wrapping a path continuation in extra parens.
+
+        Converts:
+            MATCH (a)-[:R]->(
+                  (b:T)-[:R2]->(c))
+
+        to:
+            MATCH (a)-[:R]->
+                  (b:T)-[:R2]->(c)
+
+        so that _rewrite_bare_pattern_lines sees the second line as a normal
+        inline path continuation (previous line ends with '->') and leaves it.
+        """
+        lines = query.splitlines()
+        out: list[str] = []
+        i = 0
+        while i < len(lines):
+            line = lines[i]
+            stripped = line.strip()
+            if stripped and re.search(r"(?:->|<-|-)\s*\(\s*$", stripped):
+                # Look ahead to the next non-empty line.
+                j = i + 1
+                while j < len(lines) and not lines[j].strip():
+                    j += 1
+                if j < len(lines) and lines[j].strip().startswith("("):
+                    # The LLM wrapped a sub-path in extra parens after '->(';
+                    # strip that dangling '(' from the current line.
+                    out.append(re.sub(r"\s*\(\s*$", "", line.rstrip()))
+                    i += 1
+                    # Track paren depth (1 = the outer '(' we just removed)
+                    # until the matching ')' is consumed, then strip it.
+                    depth = 1
+                    while i < len(lines):
+                        l = lines[i]
+                        i += 1
+                        for ch in l:
+                            if ch == "(":
+                                depth += 1
+                            elif ch == ")":
+                                depth -= 1
+                        out.append(l)
+                        if depth == 0:
+                            last = out[-1].rstrip()
+                            idx = last.rfind(")")
+                            if idx >= 0:
+                                out[-1] = last[:idx] + last[idx + 1 :]
+                            break
+                    continue
+            out.append(line)
+            i += 1
+        return "\n".join(out)
 
     def _rewrite_legacy_exists_patterns(self, query: str) -> str:
         def replacer(match: re.Match[str]) -> str:

@@ -62,6 +62,20 @@ WHERE dr.status IN ['Delayed', 'Failed']
 RETURN t.title_name, v.version_id, c.client_name, dp.point_name, r.region_name, dr.status, dr.deadline
 ORDER BY dr.deadline ASC
 LIMIT 20
+
+Example 3 (multi-variable join — all MATCH before WHERE, multi-hop inline):
+MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
+MATCH (rg:Rights)-[:FOR_VERSION]->(v)
+MATCH (rg)-[:GRANTED_TO]->(c:Client)
+MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v)
+MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)-[:LOCATED_IN]->(r:Region)
+WHERE c.tier = 'Tier 1'
+  AND rg.is_active = true
+  AND v.is_localized = true
+  AND dr.status IN ['Delayed', 'Failed', 'In Progress']
+RETURN c.client_name, t.title_name, v.version_id, r.region_name, dr.status, dr.deadline
+ORDER BY dr.deadline ASC
+LIMIT 25
 """.strip()
 
 PLANNER_SYSTEM_PROMPT = """
@@ -75,6 +89,9 @@ Rules:
 - Prefer explicit MATCH patterns.
 - For existence checks, use `EXISTS { MATCH ... }`, not `EXISTS((...))` pattern expressions.
 - Keep results concise and useful for answer synthesis.
+- Place all MATCH clauses before any WHERE clause. Never reference a variable in WHERE that has not been introduced by a preceding MATCH.
+- For multi-hop paths, chain them inline in one MATCH clause: MATCH (a)-[:R1]->(b)-[:R2]->(c).
+- Never wrap a sub-path in parentheses after a relationship arrow. MATCH (a)-[:R]->((b)-[:R2]->(c)) is invalid Cypher.
 """.strip()
 
 ANSWER_SYSTEM_PROMPT = """
