@@ -44,26 +44,67 @@ Relationships:
 """.strip()
 
 EXAMPLE_QUERIES = """
-Example 1:
+Q: Which delivery points have the most failed or delayed delivery requests?
+MATCH (dr:DeliveryRequest)-[:TO_POINT]->(dp:DeliveryPoint)
+WHERE dr.status IN ['Delayed', 'Failed']
+RETURN dp.point_name AS point_name,
+       dp.delivery_type AS delivery_type,
+       count(dr) AS request_count
+ORDER BY request_count DESC
+LIMIT 10
+
+Q: What titles have 4K or 8K versions with no delivery requests created yet?
+MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
+WHERE v.resolution IN ['4K', '8K']
+  AND NOT EXISTS { MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v) }
+RETURN t.title_name AS title_name,
+       t.genre AS genre,
+       v.version_id AS version_id,
+       v.resolution AS resolution
+ORDER BY t.title_name
+LIMIT 25
+
+Q: Which languages have the most completed localization jobs, and what are their average quality scores?
+MATCH (lj:LocalizationJob)-[:LOCALIZED_FOR]->(l:Language)
+WHERE lj.status = 'Completed'
+RETURN l.language_name AS language_name,
+       count(lj) AS completed_jobs,
+       round(avg(lj.quality_score), 2) AS avg_quality_score
+ORDER BY completed_jobs DESC
+LIMIT 15
+
+Q: Which studios have the most titles with active exclusive rights grants?
 MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
 MATCH (rg:Rights)-[:FOR_VERSION]->(v)
-MATCH (rg)-[:GRANTED_TO]->(c:Client)
-MATCH (rg)-[:FOR_REGION]->(r:Region)
-WHERE rg.is_active = true AND v.is_localized = true AND c.tier = 'Tier 1'
-RETURN t.title_name, v.version_id, c.client_name, r.region_name, rg.rights_type, rg.end_date
-LIMIT 20
+WHERE rg.is_active = true AND rg.rights_type = 'Exclusive'
+RETURN t.studio AS studio,
+       count(DISTINCT t) AS title_count
+ORDER BY title_count DESC
+LIMIT 10
 
-Example 2:
-MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v:Version)
-MATCH (dr)-[:REQUESTED_BY]->(c:Client)
-MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)-[:LOCATED_IN]->(r:Region)
-MATCH (t:Title)-[:HAS_VERSION]->(v)
-WHERE dr.status IN ['Delayed', 'Failed']
-RETURN t.title_name, v.version_id, c.client_name, dp.point_name, r.region_name, dr.status, dr.deadline
+Q: Show all high-priority delivery requests that missed their deadline, and which clients submitted them.
+MATCH (dr:DeliveryRequest)-[:REQUESTED_BY]->(c:Client)
+WHERE dr.priority IN ['High', 'Urgent']
+  AND dr.status IN ['Delayed', 'Failed']
+RETURN dr.request_id AS request_id,
+       dr.deadline AS deadline,
+       dr.status AS status,
+       dr.priority AS priority,
+       c.client_name AS client_name,
+       c.tier AS tier
 ORDER BY dr.deadline ASC
-LIMIT 20
+LIMIT 25
 
-Example 3 (multi-variable join — all MATCH before WHERE, multi-hop inline):
+Q: Which vendors completed the most localization jobs, and what is their average quality score?
+MATCH (lj:LocalizationJob)
+WHERE lj.status = 'Completed'
+RETURN lj.vendor AS vendor,
+       count(lj) AS completed_jobs,
+       round(avg(lj.quality_score), 2) AS avg_quality_score
+ORDER BY completed_jobs DESC
+LIMIT 10
+
+Q: Which Tier 1 clients have active rights for localized versions with delayed delivery requests?
 MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
 MATCH (rg:Rights)-[:FOR_VERSION]->(v)
 MATCH (rg)-[:GRANTED_TO]->(c:Client)
@@ -73,8 +114,30 @@ WHERE c.tier = 'Tier 1'
   AND rg.is_active = true
   AND v.is_localized = true
   AND dr.status IN ['Delayed', 'Failed', 'In Progress']
-RETURN c.client_name, t.title_name, v.version_id, r.region_name, dr.status, dr.deadline
+RETURN c.client_name AS client_name,
+       t.title_name AS title_name,
+       v.version_id AS version_id,
+       r.region_name AS region_name,
+       dr.status AS status,
+       dr.deadline AS deadline
 ORDER BY dr.deadline ASC
+LIMIT 25
+
+Q: Which active rights are expiring in the next 90 days, and which clients and regions are affected?
+MATCH (rg:Rights)-[:GRANTED_TO]->(c:Client)
+MATCH (rg)-[:FOR_REGION]->(r:Region)
+MATCH (rg)-[:FOR_VERSION]->(v:Version)
+MATCH (t:Title)-[:HAS_VERSION]->(v)
+WHERE rg.is_active = true
+  AND rg.end_date >= toString(date())
+  AND rg.end_date <= toString(date() + duration({days: 90}))
+RETURN rg.rights_id AS rights_id,
+       t.title_name AS title_name,
+       c.client_name AS client_name,
+       r.region_name AS region_name,
+       rg.rights_type AS rights_type,
+       rg.end_date AS end_date
+ORDER BY rg.end_date ASC
 LIMIT 25
 """.strip()
 
@@ -92,6 +155,8 @@ Rules:
 - Place all MATCH clauses before any WHERE clause. Never reference a variable in WHERE that has not been introduced by a preceding MATCH.
 - For multi-hop paths, chain them inline in one MATCH clause: MATCH (a)-[:R1]->(b)-[:R2]->(c).
 - Never wrap a sub-path in parentheses after a relationship arrow. MATCH (a)-[:R]->((b)-[:R2]->(c)) is invalid Cypher.
+- Always alias every column in the RETURN clause using AS (e.g. RETURN dp.point_name AS point_name).
+- The properties deadline, end_date, and start_date are stored as ISO-8601 strings, not Neo4j temporal types. Use string comparison for date filtering: rg.end_date >= toString(date()) and rg.end_date <= toString(date() + duration({days: 90})).
 """.strip()
 
 ANSWER_SYSTEM_PROMPT = """
