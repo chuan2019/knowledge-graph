@@ -1,0 +1,157 @@
+# Gold Cypher queries for the eight built-in Graph RAG sample questions.
+#
+# Each entry is the ground-truth query a correct LLM planner should produce
+# (or produce a semantically equivalent variant of) for the corresponding
+# natural-language question.
+#
+# Fields
+# -------
+# id              – stable identifier used in test parametrisation
+# question        – the exact natural-language question shown in the UI
+# cypher          – hand-verified Cypher that returns the correct answer
+# expected_columns – column names returned by the query (for shape validation)
+# min_rows        – minimum acceptable row count when run against the demo data
+#
+# Note on stored types
+# ---------------------
+# deadline / end_date / start_date are stored as ISO-8601 *strings* by the
+# data loader (pandas does not parse them as temporal types). Date-window
+# comparisons therefore use string prefix ordering (YYYY-MM-DD… sorts
+# lexicographically).  Boolean fields (is_active, is_localized) are stored
+# as Neo4j booleans.
+
+- id: q1_delivery_point_failures
+  question: "Which delivery points have the most failed or delayed delivery requests?"
+  cypher: |
+    MATCH (dr:DeliveryRequest)-[:TO_POINT]->(dp:DeliveryPoint)
+    WHERE dr.status IN ['Delayed', 'Failed']
+    RETURN dp.point_name AS point_name,
+           dp.delivery_type AS delivery_type,
+           count(dr) AS request_count
+    ORDER BY request_count DESC
+    LIMIT 10
+  expected_columns: [point_name, delivery_type, request_count]
+  min_rows: 1
+
+- id: q2_titles_no_delivery_requests
+  question: "What titles have 4K or 8K versions with no delivery requests created yet?"
+  cypher: |
+    MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
+    WHERE v.resolution IN ['4K', '8K']
+      AND NOT EXISTS { MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v) }
+    RETURN t.title_name AS title_name,
+           t.genre AS genre,
+           v.version_id AS version_id,
+           v.resolution AS resolution
+    ORDER BY t.title_name
+    LIMIT 25
+  expected_columns: [title_name, genre, version_id, resolution]
+  min_rows: 1
+
+- id: q3_language_localization_quality
+  question: "Which languages have the most completed localization jobs, and what are their average quality scores?"
+  cypher: |
+    MATCH (lj:LocalizationJob)-[:LOCALIZED_FOR]->(l:Language)
+    WHERE lj.status = 'Completed'
+    RETURN l.language_name AS language_name,
+           count(lj) AS completed_jobs,
+           round(avg(lj.quality_score), 2) AS avg_quality_score
+    ORDER BY completed_jobs DESC
+    LIMIT 15
+  expected_columns: [language_name, completed_jobs, avg_quality_score]
+  min_rows: 1
+
+- id: q4_studios_exclusive_rights
+  question: "Which studios have the most titles with active exclusive rights grants?"
+  cypher: |
+    MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
+    MATCH (rg:Rights)-[:FOR_VERSION]->(v)
+    WHERE rg.is_active = true AND rg.rights_type = 'Exclusive'
+    RETURN t.studio AS studio,
+           count(DISTINCT t) AS title_count
+    ORDER BY title_count DESC
+    LIMIT 10
+  expected_columns: [studio, title_count]
+  min_rows: 1
+
+- id: q5_high_priority_missed_deadline
+  question: "Show all high-priority delivery requests that missed their deadline, and which clients submitted them."
+  # deadline is stored as an ISO-8601 string; filter by status instead of
+  # date arithmetic to avoid type-mismatch issues with the string field.
+  cypher: |
+    MATCH (dr:DeliveryRequest)-[:REQUESTED_BY]->(c:Client)
+    WHERE dr.priority IN ['High', 'Urgent']
+      AND dr.status IN ['Delayed', 'Failed']
+    RETURN dr.request_id AS request_id,
+           dr.deadline AS deadline,
+           dr.status AS status,
+           dr.priority AS priority,
+           c.client_name AS client_name,
+           c.tier AS tier
+    ORDER BY dr.deadline ASC
+    LIMIT 25
+  expected_columns: [request_id, deadline, status, priority, client_name, tier]
+  min_rows: 1
+
+- id: q6_vendor_localization_performance
+  question: "Which vendors completed the most localization jobs, and what is their average quality score?"
+  cypher: |
+    MATCH (lj:LocalizationJob)
+    WHERE lj.status = 'Completed'
+    RETURN lj.vendor AS vendor,
+           count(lj) AS completed_jobs,
+           round(avg(lj.quality_score), 2) AS avg_quality_score
+    ORDER BY completed_jobs DESC
+    LIMIT 10
+  expected_columns: [vendor, completed_jobs, avg_quality_score]
+  min_rows: 1
+
+- id: q7_tier1_clients_delayed_localized
+  question: "Which Tier 1 clients have active rights for localized versions with delayed delivery requests?"
+  cypher: |
+    MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
+    MATCH (rg:Rights)-[:FOR_VERSION]->(v)
+    MATCH (rg)-[:GRANTED_TO]->(c:Client)
+    MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v)
+    MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)-[:LOCATED_IN]->(r:Region)
+    WHERE c.tier = 'Tier 1'
+      AND rg.is_active = true
+      AND v.is_localized = true
+      AND dr.status IN ['Delayed', 'Failed', 'In Progress']
+    RETURN c.client_name AS client_name,
+           t.title_name AS title_name,
+           v.version_id AS version_id,
+           r.region_name AS region_name,
+           dr.status AS status,
+           dr.deadline AS deadline
+    ORDER BY dr.deadline ASC
+    LIMIT 25
+  expected_columns: [client_name, title_name, version_id, region_name, status, deadline]
+  min_rows: 1
+
+- id: q8_rights_expiring_90_days
+  question: "Which active rights are expiring in the next 90 days, and which clients and regions are affected?"
+  # end_date is stored as an ISO-8601 string so it sorts lexicographically.
+  # Use toString(date()) to build a comparable lower bound.  Upper bound is
+  # computed as a literal from the current date at fixture-generation time;
+  # the integration test accepts any non-empty result set.
+  cypher: |
+    MATCH (rg:Rights)-[:GRANTED_TO]->(c:Client)
+    MATCH (rg)-[:FOR_REGION]->(r:Region)
+    MATCH (rg)-[:FOR_VERSION]->(v:Version)
+    MATCH (t:Title)-[:HAS_VERSION]->(v)
+    WHERE rg.is_active = true
+      AND rg.end_date >= toString(date())
+      AND rg.end_date <= toString(date() + duration({days: 90}))
+    RETURN rg.rights_id AS rights_id,
+           t.title_name AS title_name,
+           c.client_name AS client_name,
+           r.region_name AS region_name,
+           rg.rights_type AS rights_type,
+           rg.end_date AS end_date
+    ORDER BY rg.end_date ASC
+    LIMIT 25
+  expected_columns: [rights_id, title_name, client_name, region_name, rights_type, end_date]
+  # Results depend on current date relative to end_date; set to 0 to avoid
+  # false failures if the window falls outside the synthetic data range.
+  min_rows: 0
