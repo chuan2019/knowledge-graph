@@ -86,6 +86,19 @@ class GraphStoreUnitTestCase(unittest.IsolatedAsyncioTestCase):
             any("Normalized generated Cypher before execution" in message for message in captured.output)
         )
 
+    async def test_safe_query_rewrites_wrapped_path_continuation(self) -> None:
+        """LLM anti-pattern: sub-path wrapped in extra parens after '->('."""
+        query = self.store._ensure_safe_read_query(
+            "MATCH (dr:DeliveryRequest)-[:TO_POINT]->(\n"
+            "      (dp:DeliveryPoint)-[:LOCATED_IN]->(r:Region))\n"
+            "WHERE dr.status = 'Delayed'\n"
+            "RETURN dr.request_id, dp.point_name, r.region_name"
+        )
+
+        self.assertNotIn("->(\n", query)
+        self.assertIn("(dp:DeliveryPoint)-[:LOCATED_IN]->(r:Region)", query)
+        self.assertIn("RETURN", query)
+
     async def test_run_read_query_uses_session_and_returns_rows(self) -> None:
         session = MagicMock()
         result = MagicMock()
