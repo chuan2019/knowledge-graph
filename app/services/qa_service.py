@@ -109,7 +109,8 @@ MATCH (t:Title)-[:HAS_VERSION]->(v:Version)
 MATCH (rg:Rights)-[:FOR_VERSION]->(v)
 MATCH (rg)-[:GRANTED_TO]->(c:Client)
 MATCH (dr:DeliveryRequest)-[:FOR_VERSION]->(v)
-MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)-[:LOCATED_IN]->(r:Region)
+MATCH (dr)-[:TO_POINT]->(dp:DeliveryPoint)
+MATCH (dp)-[:LOCATED_IN]->(r:Region)
 WHERE c.tier = 'Tier 1'
   AND rg.is_active = true
   AND v.is_localized = true
@@ -153,10 +154,11 @@ Rules:
 - For existence checks, use `EXISTS { MATCH ... }`, not `EXISTS((...))` pattern expressions.
 - Keep results concise and useful for answer synthesis.
 - Place all MATCH clauses before any WHERE clause. Never reference a variable in WHERE that has not been introduced by a preceding MATCH.
-- For multi-hop paths, chain them inline in one MATCH clause: MATCH (a)-[:R1]->(b)-[:R2]->(c).
+- Prefer separate MATCH clauses over inline chained multi-hop paths. Instead of MATCH (a)-[:R1]->(b)-[:R2]->(c), write MATCH (a)-[:R1]->(b) followed by MATCH (b)-[:R2]->(c). Only chain multiple hops in a single MATCH when the semantics require it (e.g., inside OPTIONAL MATCH where splitting would make one hop mandatory).
 - Never wrap a sub-path in parentheses after a relationship arrow. MATCH (a)-[:R]->((b)-[:R2]->(c)) is invalid Cypher.
 - Always alias every column in the RETURN clause using AS (e.g. RETURN dp.point_name AS point_name).
-- The properties deadline, end_date, and start_date are stored as ISO-8601 strings, not Neo4j temporal types. Use string comparison for date filtering: rg.end_date >= toString(date()) and rg.end_date <= toString(date() + duration({days: 90})).
+- The properties deadline, end_date, and start_date are stored as ISO-8601 strings, not Neo4j temporal types.
+- Use string comparison for date filtering: rg.end_date >= toString(date()) and rg.end_date <= toString(date() + duration({days: 90})).
 """.strip()
 
 ANSWER_SYSTEM_PROMPT = """
